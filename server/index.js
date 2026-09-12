@@ -301,8 +301,7 @@ function getRecordBookData() {
       ) THEN 1 ELSE 0 END AS is_last_place
      FROM season_results sr
      JOIN seasons s ON s.season_id = sr.season_id
-     JOIN managers m ON m.manager_id = sr.manager_id
-     WHERE (sr.wins + sr.losses + sr.ties) > 0`
+     JOIN managers m ON m.manager_id = sr.manager_id`
   ).all().map((row) => ({
     ...row,
     wins: safeNumber(row.wins),
@@ -324,7 +323,7 @@ function getRecordBookData() {
           ? '3rd'
           : row.playoffs_made ? 'Playoffs' : 'Regular Season',
     winning_percentage: formatWinningPercentage(row.wins, row.losses, row.ties),
-  }));
+  })).filter((row) => Number(row.season_number) !== 20 && (row.wins + row.losses + row.ties) > 0);
 
   const bestCareerWins = [...leaders].sort((a, b) => b.wins - a.wins || a.losses - b.losses)[0] || null;
   const mostChampionships = [...leaders].sort((a, b) => b.championships - a.championships || b.wins - a.wins)[0] || null;
@@ -332,8 +331,8 @@ function getRecordBookData() {
   const mostSeasons = [...leaders].sort((a, b) => b.seasons_played - a.seasons_played || b.wins - a.wins)[0] || null;
   const mostPlayoffAppearances = [...leaders].sort((a, b) => b.playoff_appearances - a.playoff_appearances || b.wins - a.wins)[0] || null;
 
-  const sortedByBestRecord = [...seasons].filter((s) => s.season_number !== 20).sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins || b.points_for - a.points_for);
-  const sortedByWorstRecord = [...seasons].filter((s) => s.season_number !== 20).sort((a, b) => a.winning_percentage - b.winning_percentage || a.wins - b.wins || a.points_for - b.points_for);
+  const sortedByBestRecord = [...seasons].sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins || b.points_for - a.points_for);
+  const sortedByWorstRecord = [...seasons].sort((a, b) => a.winning_percentage - b.winning_percentage || a.wins - b.wins || a.points_for - b.points_for);
   const sortedByMostWins = [...seasons].sort((a, b) => b.wins - a.wins || b.points_for - a.points_for);
   const sortedByFewestWins = [...seasons].sort((a, b) => a.wins - b.wins || a.points_for - b.points_for);
   const sortedByPointsFor = [...seasons].sort((a, b) => b.points_for - a.points_for || b.wins - a.wins);
