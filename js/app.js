@@ -856,19 +856,19 @@ function renderRecordBook(data) {
       </div>
     </article>
   `;
-  const renderH2HRankingTable = (title, records, isLeast = false) => `
+  const renderH2HRankingTable = (title, records, isClosest = false) => `
     <article class="record-card record-card--ranking">
       <h3 class="section-title">${title}</h3>
       <div class="table-shell">
         <table class="table data-table record-ranking-table align-middle mb-0">
-          <thead><tr><th>#</th><th>Manager</th><th>Opponent</th><th>Record</th><th>Win %</th></tr></thead>
+          <thead><tr><th>#</th><th>Manager</th><th>Opponent</th><th>Record</th><th>${isClosest ? 'Games' : 'Win %'}</th></tr></thead>
           <tbody>${(records || []).map((record, index) => `
             <tr>
               <td>${index + 1}</td>
               <td><span class="record-ranking__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(record.manager_color_1)}; --team-color-2: ${escapeHtml(record.manager_color_2)}" title="${escapeHtml(record.manager_name)}"><i class="${escapeHtml(record.manager_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.manager_id}" data-route>${escapeHtml(shortenManagerName(record.manager_name))}</a></strong></span></td>
               <td><span class="record-ranking__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(record.opponent_color_1)}; --team-color-2: ${escapeHtml(record.opponent_color_2)}" title="${escapeHtml(record.opponent_name)}"><i class="${escapeHtml(record.opponent_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.opponent_id}" data-route>${escapeHtml(shortenManagerName(record.opponent_name))}</a></strong></span></td>
               <td><strong>${record.wins}-${record.losses}</strong></td>
-              <td><strong class="${isLeast ? 'text-danger' : 'text-success'}">${(record.winPct * 100).toFixed(1)}%</strong></td>
+              <td><strong class="${isClosest ? 'text-warning' : 'text-success'}">${isClosest ? `${record.total} games` : `${(record.winPct * 100).toFixed(1)}%`}</strong></td>
             </tr>
           `).join('')}</tbody>
         </table>
@@ -883,7 +883,7 @@ function renderRecordBook(data) {
       </ol>
     </article>
   `;
-  const renderCategoryPanel = (key, categories) => `<div class="record-tab-panel ${key === 'singleSeason' ? 'record-tab-panel--active' : ''}" data-record-panel="${key}">${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings">${renderSeasonRankingTable('Top 20 Best Seasons', data.topBestSeasons)}${renderSeasonRankingTable('Top 20 Worst Seasons', data.topWorstSeasons, true)}</div>` : ''}<div class="record-grid record-grid--categories">${categories.map(renderCategory).join('')}</div>${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings mt-4">${renderH2HRankingTable('🔥 Most Dominant H2H Records', data.mostDominantH2H)}${renderH2HRankingTable('🧊 Least Dominant H2H Records', data.leastDominantH2H, true)}</div>` : ''}</div>`;
+  const renderCategoryPanel = (key, categories) => `<div class="record-tab-panel ${key === 'singleSeason' ? 'record-tab-panel--active' : ''}" data-record-panel="${key}">${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings">${renderSeasonRankingTable('Top 20 Best Seasons', data.topBestSeasons)}${renderSeasonRankingTable('Top 20 Worst Seasons', data.topWorstSeasons, true)}</div>` : ''}<div class="record-grid record-grid--categories">${categories.map(renderCategory).join('')}</div>${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings mt-4">${renderH2HRankingTable('🔥 Most Dominant H2H Records', data.mostDominantH2H)}${renderH2HRankingTable('⚔️ Closest All-Time Rivalries', data.closestRivalriesH2H, true)}</div>` : ''}</div>`;
 
   appContainer.innerHTML = `
     <section class="page-card">
