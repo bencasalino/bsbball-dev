@@ -331,7 +331,10 @@ function renderLeaders(leaders) {
           <p class="page-eyebrow">League Leaders</p>
           <h2 class="page-title"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> All-time Manager Stats</h2>
         </div>
-        <p class="sort-helper mb-0">Click any column header to sort it.</p>
+        <div class="text-md-end">
+          <p class="sort-helper mb-1">Click any column header to sort it.</p>
+          <p class="sort-helper mb-0"><span class="manager-active-dot" style="margin-left: 0; margin-right: 0.35rem;" aria-hidden="true"></span>Managers with a green dot are active for the upcoming season</p>
+        </div>
       </div>
       <div class="table-shell mt-4">
         <table class="table data-table align-middle mb-0">
