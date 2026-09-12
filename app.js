@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 
+// Ensure tmp directory exists for Phusion Passenger
+const tmpDir = path.join(__dirname, 'tmp');
+if (!fs.existsSync(tmpDir)) {
+  fs.mkdirSync(tmpDir, { recursive: true });
+}
+
 const dbPath = path.join(__dirname, 'data', 'league.db');
 
 // Auto-initialize SQLite database if it doesn't exist on server startup

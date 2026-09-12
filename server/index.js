@@ -80,11 +80,11 @@ function formatWinningPercentage(wins, losses, ties = 0, gamesPlayed = null) {
 }
 
 function getManagers() {
-  return db.prepare('SELECT * FROM managers ORDER BY joined_season, name').all();
+  return getDbInstance().prepare('SELECT * FROM managers ORDER BY joined_season, name').all();
 }
 
 function getLeaderRows() {
-  const rows = db.prepare(
+  const rows = getDbInstance().prepare(
     `SELECT
       m.manager_id,
       m.name,
@@ -140,11 +140,11 @@ function getLeaderRows() {
 }
 
 function getLatestSeason() {
-  return db.prepare('SELECT * FROM seasons ORDER BY season_number DESC LIMIT 1').get();
+  return getDbInstance().prepare('SELECT * FROM seasons ORDER BY season_number DESC LIMIT 1').get();
 }
 
 function getRecentChampion() {
-  return db.prepare(
+  return getDbInstance().prepare(
     `SELECT
       s.season_id,
       s.season_number,
@@ -162,7 +162,7 @@ function getRecentChampion() {
 }
 
 function getSeasonSummaries() {
-  const summaries = db.prepare(
+  const summaries = getDbInstance().prepare(
     `SELECT
       s.season_id,
       s.season_number,
@@ -193,7 +193,7 @@ function getSeasonSummaries() {
     ...row,
     manager_count: safeNumber(row.manager_count),
   }));
-  const finishers = db.prepare(
+  const finishers = getDbInstance().prepare(
     `SELECT season_id, regular_season_rank, m.name AS manager_name, m.team_logo, m.team_color_1, m.team_color_2
      FROM season_results sr
      JOIN managers m ON m.manager_id = sr.manager_id
@@ -211,10 +211,10 @@ function getSeasonSummaries() {
 }
 
 function getSeasonDetail(seasonId) {
-  const season = db.prepare('SELECT * FROM seasons WHERE season_id = ?').get(seasonId);
+  const season = getDbInstance().prepare('SELECT * FROM seasons WHERE season_id = ?').get(seasonId);
   if (!season) return null;
 
-  const champion = db.prepare(
+  const champion = getDbInstance().prepare(
     `SELECT m.manager_id, m.name
      FROM awards a
      JOIN award_types at ON at.award_id = a.award_id
@@ -223,7 +223,7 @@ function getSeasonDetail(seasonId) {
      LIMIT 1`
   ).get(seasonId) || null;
 
-  const standings = db.prepare(
+  const standings = getDbInstance().prepare(
     `SELECT
       sr.manager_id,
       m.name AS manager_name,
@@ -266,7 +266,7 @@ function getSeasonDetail(seasonId) {
 
 function getRecordBookData() {
   const leaders = getLeaderRows();
-  const seasons = db.prepare(
+  const seasons = getDbInstance().prepare(
     `SELECT
       s.season_number,
       s.year,
@@ -407,7 +407,7 @@ function getLeagueSummary() {
   const leaders = getLeaderRows();
   const recentChampion = getRecentChampion();
   const seasons = getSeasonSummaries();
-  const totalChampionships = db.prepare(
+  const totalChampionships = getDbInstance().prepare(
     `SELECT COUNT(*) AS count
      FROM awards a
      JOIN award_types at ON at.award_id = a.award_id
@@ -421,7 +421,8 @@ function getLeagueSummary() {
   return {
     latestSeason,
     managerCount: getManagers().length,
-    seasonCount: db.prepare('SELECT COUNT(*) AS count FROM seasons').get().count,
+    seasonCount: getDbInstance().prepare('SELECT COUNT(*) AS count FROM seasons').get().count,
+    totalChampionships: safeNumber(totalChampionships),
     totalChampionships: safeNumber(totalChampionships),
     recentChampion,
     highlights: [
@@ -456,7 +457,7 @@ app.get('/api/managers', (req, res) => {
 
 app.get('/api/managers/:id', (req, res) => {
   if (!requireDb(res)) return;
-  const row = db.prepare('SELECT * FROM managers WHERE manager_id = ?').get(req.params.id);
+  const row = getDbInstance().prepare('SELECT * FROM managers WHERE manager_id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Manager not found' });
   res.json(row);
 });
@@ -482,7 +483,7 @@ app.get('/api/seasons/:id/results', (req, res) => {
 
 app.get('/api/awards', (req, res) => {
   if (!requireDb(res)) return;
-  const rows = db.prepare(
+  const rows = getDbInstance().prepare(
     `SELECT a.id, a.season_id, s.season_number, s.year, a.manager_id, m.name AS manager_name, at.name AS award_name
      FROM awards a
      JOIN award_types at ON at.award_id = a.award_id
@@ -495,7 +496,7 @@ app.get('/api/awards', (req, res) => {
 
 app.get('/api/awards/manager/:managerId', (req, res) => {
   if (!requireDb(res)) return;
-  const rows = db.prepare(
+  const rows = getDbInstance().prepare(
     `SELECT a.id, a.season_id, s.season_number, s.year, at.name AS award_name
      FROM awards a
      JOIN award_types at ON at.award_id = a.award_id
