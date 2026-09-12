@@ -720,7 +720,7 @@ function renderHallOfFame(data) {
       <td>${progressCell('Wins', requirements.wins)}</td>
       <td>${progressCell('Titles', requirements.championships)}</td>
       <td>${progressCell('Top 3', requirements.top3Finishes)}</td>
-      ${includeStatus ? `<td><span class="hall-table__crowns" aria-label="${completedCategories} completed requirements">${'<i class="fa-solid fa-gem" aria-hidden="true"></i>'.repeat(completedCategories)}</span></td>` : `<td><span class="hof-predictor-badge"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> ${getClosestHoFMilestone(member).text}</span></td>`}
+      ${includeStatus ? `<td><span class="hall-table__crowns" aria-label="${completedCategories} of 4 categories met">${'<i class="fa-solid fa-gem" aria-hidden="true" style="color: #1350b3; margin-right: 0.15rem;"></i>'.repeat(completedCategories)} <small class="text-muted" style="margin-left: 0.15rem;">(${completedCategories} / 4)</small></span></td>` : `<td><span class="hof-predictor-badge"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> ${getClosestHoFMilestone(member).text}</span></td>`}
     </tr>
   `;
   };
@@ -729,7 +729,7 @@ function renderHallOfFame(data) {
   const renderTable = (managers, includeStatus) => `
     <div class="table-shell mt-3">
       <table class="table data-table hall-table align-middle mb-0">
-        <thead><tr>${includeStatus ? '<th>Status</th>' : ''}<th>Manager</th><th>Seasons</th><th>Wins</th><th>Titles</th><th>Top 3</th>${includeStatus ? '<th>Crowns</th>' : '<th>Closest Target</th>'}</tr></thead>
+        <thead><tr>${includeStatus ? '<th>Status</th>' : ''}<th>Manager</th><th>Seasons</th><th>Wins</th><th>Titles</th><th>Top 3</th>${includeStatus ? '<th>Criteria Met</th>' : '<th>Closest Target</th>'}</tr></thead>
         <tbody>${managers.map((manager) => renderRow(manager, includeStatus)).join('')}</tbody>
       </table>
     </div>
@@ -868,7 +868,7 @@ function renderRecordBook(data) {
               <td><span class="record-ranking__manager"><span class="team-logo team-logo--sm" style="--team-color-1: ${escapeHtml(record.manager_color_1)}; --team-color-2: ${escapeHtml(record.manager_color_2)}" title="${escapeHtml(record.manager_name)}"><i class="${escapeHtml(record.manager_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.manager_id}" data-route>${escapeHtml(shortenManagerName(record.manager_name))}</a></strong></span></td>
               <td><span class="record-ranking__manager"><span class="team-logo team-logo--sm" style="--team-color-1: ${escapeHtml(record.opponent_color_1)}; --team-color-2: ${escapeHtml(record.opponent_color_2)}" title="${escapeHtml(record.opponent_name)}"><i class="${escapeHtml(record.opponent_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.opponent_id}" data-route>${escapeHtml(shortenManagerName(record.opponent_name))}</a></strong></span></td>
               <td><strong>${record.wins}-${record.losses}</strong></td>
-              <td><strong class="${isClosest ? 'text-warning' : 'text-success'}">${isClosest ? `${record.total} games` : `${(record.winPct * 100).toFixed(1)}%`}</strong></td>
+              <td><strong class="${isClosest ? 'rivalry-games-count' : 'text-success'}">${isClosest ? `${record.total} games` : `${(record.winPct * 100).toFixed(1)}%`}</strong></td>
             </tr>
           `).join('')}</tbody>
         </table>
@@ -961,7 +961,23 @@ function renderGoat(data) {
       </div>
       <div class="goat-formula mt-4">
         <h3 class="section-title">How the GOAT Score Works</h3>
-        <table class="table data-table goat-formula-table align-middle mb-0"><tbody>${weightRows}</tbody></table>
+        <div class="goat-formula-grid">
+          <div>
+            <table class="table data-table goat-formula-table align-middle mb-0"><tbody>${weightRows}</tbody></table>
+          </div>
+          <div class="goat-formula-card">
+            <h4 class="goat-formula-card__title"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> Scoring Philosophy</h4>
+            <p class="goat-formula-card__text">The GOAT Score rewards championship hardware, postseason longevity, regular season dominance, and career consistency while penalizing last-place finishes.</p>
+            <ul class="goat-formula-card__list">
+              <li><strong>Championships (+100):</strong> The ultimate prize in BS Basketball history.</li>
+              <li><strong>Finals & Top 3 (+45 / +30):</strong> Deep playoff runs and podium finishes.</li>
+              <li><strong>Best Regular Season (+35):</strong> Finishing 1st place in the regular season.</li>
+              <li><strong>Playoffs (+15) & Wins (+5):</strong> Rewarding active postseason runs & weekly victories.</li>
+              <li><strong>Longevity (+10):</strong> Points for every completed season in league history.</li>
+              <li><strong>Last Place (-25):</strong> Penalty for finishing dead last in any season.</li>
+            </ul>
+          </div>
+        </div>
         <p class="page-copy mt-3 mb-0"><strong>GOAT Score</strong> = Championships × 100 + Runner-Ups × 45 + 3rd × 30 + Best Regular Seasons × 35 + Playoffs × 15 + Week Wins × 5 + Seasons Played × 10 − Last Places × 25</p>
       </div>
     </section>
@@ -1235,29 +1251,22 @@ async function renderRoute() {
 
 function initThemeToggle() {
   const toggleBtn = document.getElementById('theme-toggle');
-  const icon = document.getElementById('theme-toggle-icon');
-  if (!toggleBtn || !icon) return;
+  if (!toggleBtn) return;
 
-  const updateIcon = (theme) => {
-    if (theme === 'light') {
-      icon.className = 'fa-solid fa-sun';
-      toggleBtn.title = 'Switch to Dark Mode';
-      toggleBtn.setAttribute('aria-label', 'Switch to Dark Mode');
-    } else {
-      icon.className = 'fa-solid fa-moon';
-      toggleBtn.title = 'Switch to Light Mode';
-      toggleBtn.setAttribute('aria-label', 'Switch to Light Mode');
-    }
+  const updateToggleUI = (theme) => {
+    const isLight = theme === 'light';
+    toggleBtn.title = isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+    toggleBtn.setAttribute('aria-label', isLight ? 'Switch to Dark Mode' : 'Switch to Light Mode');
   };
 
   const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  updateIcon(currentTheme);
+  updateToggleUI(currentTheme);
 
   toggleBtn.addEventListener('click', () => {
     const active = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', active);
     localStorage.setItem('bs_theme', active);
-    updateIcon(active);
+    updateToggleUI(active);
   });
 }
 

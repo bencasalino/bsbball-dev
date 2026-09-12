@@ -15,7 +15,7 @@
 }
 
 :focus-visible {
-  outline: 2px solid #e65100;
+  outline: 2px solid #1350b3;
   outline-offset: 3px;
 }
 
@@ -23,7 +23,7 @@
   position: absolute;
   top: -100px;
   left: 1rem;
-  background: #e65100;
+  background: #1350b3;
   color: #ffffff;
   font-weight: 700;
   padding: 0.5rem 1rem;
@@ -87,6 +87,53 @@ header .h4{
   height: 2.2rem;
   justify-content: center;
   width: 2.2rem;
+}
+
+.theme-toggle-switch {
+  align-items: center;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.35rem;
+  height: 2.2rem;
+  padding: 0.25rem 0.35rem;
+  position: relative;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  width: 4.2rem;
+}
+
+.theme-toggle-switch__icon {
+  align-items: center;
+  color: var(--text-soft);
+  display: flex;
+  font-size: 0.82rem;
+  justify-content: center;
+  width: 1.5rem;
+  z-index: 2;
+  transition: color 0.2s ease;
+}
+
+.theme-toggle-switch__thumb {
+  background: #1350b3;
+  border-radius: 50%;
+  height: 1.6rem;
+  left: 0.25rem;
+  position: absolute;
+  top: 0.25rem;
+  transition: transform 0.2s ease;
+  width: 1.6rem;
+  z-index: 1;
+}
+
+[data-theme="light"] .theme-toggle-switch__thumb {
+  transform: translateX(2rem);
+}
+
+[data-theme="dark"] .theme-toggle-switch__icon:last-child,
+[data-theme="light"] .theme-toggle-switch__icon:first-child {
+  color: #ffffff;
 }
 
 .site-header__action:hover,
@@ -1483,13 +1530,60 @@ header .h4{
   white-space: nowrap;
 }
 
+.goat-formula-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.8fr);
+  align-items: start;
+}
+
 .goat-formula-table {
-  max-width: 34rem;
+  width: 100%;
 }
 
 .goat-formula-table td:last-child {
   font-weight: 800;
   text-align: right;
+}
+
+.goat-formula-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+}
+
+.goat-formula-card__title {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.goat-formula-card__title i {
+  color: #1350b3;
+  margin-right: 0.35rem;
+}
+
+.goat-formula-card__text {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin-bottom: 0.85rem;
+}
+
+.goat-formula-card__list {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.goat-formula-card__list strong {
+  color: var(--text);
 }
 
 .rivalry-selectors {
@@ -1631,7 +1725,7 @@ header .h4{
 
 /* Light Mode Overrides */
 [data-theme="light"] {
-  --brand: #e65100;
+  --brand: #1350b3;
   --bg: #f5f7fa;
   --bg-elevated: #ffffff;
   --bg-soft: #eef1f6;
@@ -1641,15 +1735,36 @@ header .h4{
   --border: #dee2e6;
   --border-strong: #ced4da;
   --text: #1a1a1a;
-  --text-muted: #555555;
-  --text-soft: #777777;
+  --text-muted: #495057;
+  --text-soft: #6c757d;
+}
+
+[data-theme="light"] .hero-card,
+[data-theme="light"] .page-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 [data-theme="light"] .site-header,
 [data-theme="light"] .site-footer {
   background: #ffffff;
   color: var(--text);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.015);
+}
+
+[data-theme="light"] .feature-card,
+[data-theme="light"] .season-card,
+[data-theme="light"] .season-teaser,
+[data-theme="light"] .trophy-card,
+[data-theme="light"] .goat-podium-card,
+[data-theme="light"] .record-card,
+[data-theme="light"] .summary-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.015);
+}
+
+[data-theme="light"] .feature-card:hover,
+[data-theme="light"] .season-card:hover,
+[data-theme="light"] .season-teaser:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .site-nav__link {
@@ -1659,7 +1774,7 @@ header .h4{
 [data-theme="light"] .site-nav__link:hover,
 [data-theme="light"] .site-nav__link:focus,
 [data-theme="light"] .site-nav__link.is-active {
-  border-bottom-color: #e65100;
+  border-bottom-color: #1350b3;
   color: #1a1a1a;
 }
 
@@ -1670,7 +1785,7 @@ header .h4{
 
 [data-theme="light"] .site-header__action:hover,
 [data-theme="light"] .site-header__action:focus {
-  border-color: #e65100;
+  border-color: #1350b3;
   color: #1a1a1a;
 }
 
@@ -1679,18 +1794,24 @@ header .h4{
 }
 
 [data-theme="light"] .table th {
-  color: #333333;
+  color: #212529;
   background: #f1f3f5;
   border-color: var(--border);
 }
 
 [data-theme="light"] .table td {
   border-color: var(--border);
+  color: #1a1a1a;
 }
 
 [data-theme="light"] .leader-progress {
   background: linear-gradient(90deg, #2e7d32 var(--progress), #e0e0e0 var(--progress));
-  color: #ffffff;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .leader-progress__value {
+  color: #1a1a1a;
+  font-weight: 800;
 }
 
 [data-theme="light"] .leader-progress--losses {
@@ -1699,7 +1820,8 @@ header .h4{
 
 [data-theme="light"] .record-ranking-list li > strong {
   background: linear-gradient(90deg, #2e7d32 var(--record-progress), #e0e0e0 var(--record-progress));
-  color: #ffffff;
+  color: #1a1a1a;
+  font-weight: 800;
 }
 
 [data-theme="light"] .record-ranking-list li > strong.record-ranking__value--plain {
@@ -1708,6 +1830,69 @@ header .h4{
 
 [data-theme="light"] .record-ranking__record--worst {
   background: linear-gradient(90deg, #c62828 var(--record-progress), #e0e0e0 var(--record-progress)) !important;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .record-ranking-list small {
+  color: #495057;
+}
+
+[data-theme="light"] .hall-page {
+  background: var(--surface);
+}
+
+[data-theme="light"] .hall-card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+[data-theme="light"] .data-table {
+  --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
+  --bs-table-hover-bg: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .hall-progress-box {
+  background: color-mix(in srgb, #e9ecef calc(100% - var(--progress)), #d1e7dd var(--progress));
+  border-color: color-mix(in srgb, #ced4da calc(100% - var(--progress)), #a3cfbb var(--progress));
+  color: #1a1a1a;
+  font-weight: 800;
+}
+
+[data-theme="light"] .hall-progress-box--complete {
+  background: #d1e7dd;
+  border-color: #a3cfbb;
+  color: #0f5132;
+  font-weight: 800;
+}
+
+[data-theme="light"] .hall-progress-label {
+  color: #333333;
+  font-weight: 700;
+}
+
+[data-theme="light"] .hall-table__progress {
+  background: color-mix(in srgb, #e9ecef calc(100% - var(--progress)), #d1e7dd var(--progress));
+  border-color: color-mix(in srgb, #ced4da calc(100% - var(--progress)), #a3cfbb var(--progress));
+  color: #1a1a1a;
+  font-weight: 800;
+}
+
+[data-theme="light"] .hall-table__status--in {
+  background: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+
+[data-theme="light"] .hall-table__status--out {
+  background: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+[data-theme="light"] .hof-predictor-badge {
+  background: #f8f9fa;
+  color: #212529;
+  border-color: #ced4da;
 }
 
 [data-theme="light"] .trajectory-chart {
@@ -1716,7 +1901,45 @@ header .h4{
 
 [data-theme="light"] .hall-info-modal__dialog {
   background: #ffffff;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .trophy-icons {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.005));
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 0 rgba(255, 255, 255, 0.2) inset;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .trophy-icons::after {
+  background: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  bottom: -0.35rem;
+  height: 0.2rem;
+}
+
+[data-theme="light"] .rivalry-substats div {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+[data-theme="light"] .rivalry-substats span {
+  color: #495057;
+}
+
+[data-theme="light"] .rivalry-substats strong {
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .rivalry-games-count {
+  color: #d94800;
+  font-weight: 800;
+}
+
+[data-theme="light"] .rivalry-tape-table td.rivalry-tape__winner {
+  background: #d1e8d5;
+  color: #0f5132;
 }
 
 @media (max-width: 991.98px) {
