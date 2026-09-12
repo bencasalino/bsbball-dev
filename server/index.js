@@ -17,17 +17,35 @@ app.use('/js', express.static(path.join(ROOT, 'js')));
 app.use('/fonts', express.static(path.join(ROOT, 'fonts')));
 app.use('/images', express.static(path.join(ROOT, 'images')));
 
-let db;
-try {
-  db = new Database(DB_PATH, { readonly: true });
-  console.log('Opened database at', DB_PATH);
-} catch (err) {
-  console.warn('Could not open database at', DB_PATH, '-', err.message);
-  db = null;
+let db = null;
+
+function getDbInstance() {
+  if (db) return db;
+  const fs = require('fs');
+  if (!fs.existsSync(DB_PATH)) {
+    console.log('Database file not found. Initializing database...');
+    try {
+      const initDb = require('../init-db');
+      initDb();
+    } catch (err) {
+      console.error('Failed to auto-initialize DB:', err);
+    }
+  }
+  try {
+    db = new Database(DB_PATH);
+    console.log('Opened database at', DB_PATH);
+  } catch (err) {
+    console.warn('Could not open database at', DB_PATH, '-', err.message);
+    db = null;
+  }
+  return db;
 }
 
+// Attempt initial DB connection
+getDbInstance();
+
 function requireDb(res) {
-  if (!db) {
+  if (!getDbInstance()) {
     res.status(500).json({ error: 'Database not initialized. Run `npm run init-db` first.' });
     return false;
   }
@@ -475,7 +493,7 @@ app.get('/api/awards/manager/:managerId', (req, res) => {
 
 app.get('/api/trophy-case', (req, res) => {
   if (!requireDb(res)) return;
-  res.json(getCalculatedTrophyCaseData(db));
+  res.json(getCalculatedTrophyCaseData(getDbInstance()));
 });
 
 app.get('/api/record-book', (req, res) => {
@@ -485,12 +503,12 @@ app.get('/api/record-book', (req, res) => {
 
 app.get('/api/goat', (req, res) => {
   if (!requireDb(res)) return;
-  res.json(getGoatData(db));
+  res.json(getGoatData(getDbInstance()));
 });
 
 app.get('/api/career-trajectories/:managerId', (req, res) => {
   if (!requireDb(res)) return;
-  const trajectory = getCareerTrajectoryData(db, req.params.managerId);
+  const trajectory = getCareerTrajectoryData(getDbInstance(), req.params.managerId);
   if (!trajectory) return res.status(404).json({ error: 'Manager not found' });
   res.json(trajectory);
 });
