@@ -827,13 +827,30 @@ function renderRecordBook(data) {
     };
     return icons[category.key] || '';
   };
+  const renderOutcomeCell = (record, isWorst) => {
+    if (isWorst) {
+      const label = record.is_last_place ? 'Last Place' : `${formatOrdinal(record.regular_season_rank)} Place`;
+      return `<i class="fa-solid fa-poo trophy-icon trophy-icon--poo" aria-hidden="true"></i> ${escapeHtml(label)}`;
+    }
+    const outcome = record.outcome || '';
+    if (record.champion || outcome === 'Championship') {
+      return `<i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i> ${escapeHtml(outcome)}`;
+    }
+    if (record.playoff_finish === 2 || outcome === 'Finalist' || outcome === 'Runner-Up') {
+      return `<i class="fa-solid fa-medal trophy-icon trophy-icon--silver" aria-hidden="true"></i> ${escapeHtml(outcome)}`;
+    }
+    if (record.playoff_finish === 3 || outcome === '3rd') {
+      return `<i class="fa-solid fa-medal trophy-icon trophy-icon--bronze" aria-hidden="true"></i> ${escapeHtml(outcome)}`;
+    }
+    return escapeHtml(outcome);
+  };
   const renderSeasonRankingTable = (title, records, isWorst = false) => `
     <article class="record-card record-card--ranking">
       <h3 class="section-title">${title}</h3>
       <div class="table-shell">
         <table class="table data-table record-ranking-table align-middle mb-0">
           <thead><tr><th>#</th><th>Manager</th><th>Season</th><th>Record</th><th>Outcome</th></tr></thead>
-          <tbody>${records.map((record, index) => `<tr><td>${index + 1}</td><td><strong>${escapeHtml(record.manager_name)}</strong></td><td>S${record.season_number} (${record.year})</td><td>${record.wins}-${record.losses}</td><td>${escapeHtml(isWorst ? (record.is_last_place ? 'Last Place' : `${formatOrdinal(record.regular_season_rank)} Place`) : record.outcome)}</td></tr>`).join('')}</tbody>
+          <tbody>${records.map((record, index) => `<tr><td>${index + 1}</td><td><strong>${escapeHtml(record.manager_name)}</strong></td><td>S${record.season_number} (${record.year})</td><td>${record.wins}-${record.losses}</td><td>${renderOutcomeCell(record, isWorst)}</td></tr>`).join('')}</tbody>
         </table>
       </div>
     </article>
