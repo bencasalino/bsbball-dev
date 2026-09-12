@@ -332,8 +332,8 @@ function getRecordBookData() {
   const mostSeasons = [...leaders].sort((a, b) => b.seasons_played - a.seasons_played || b.wins - a.wins)[0] || null;
   const mostPlayoffAppearances = [...leaders].sort((a, b) => b.playoff_appearances - a.playoff_appearances || b.wins - a.wins)[0] || null;
 
-  const sortedByBestRecord = [...seasons].sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins || b.points_for - a.points_for);
-  const sortedByWorstRecord = [...seasons].sort((a, b) => a.winning_percentage - b.winning_percentage || a.wins - b.wins || a.points_for - b.points_for);
+  const sortedByBestRecord = [...seasons].filter((s) => s.season_number !== 20).sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins || b.points_for - a.points_for);
+  const sortedByWorstRecord = [...seasons].filter((s) => s.season_number !== 20).sort((a, b) => a.winning_percentage - b.winning_percentage || a.wins - b.wins || a.points_for - b.points_for);
   const sortedByMostWins = [...seasons].sort((a, b) => b.wins - a.wins || b.points_for - a.points_for);
   const sortedByFewestWins = [...seasons].sort((a, b) => a.wins - b.wins || a.points_for - b.points_for);
   const sortedByPointsFor = [...seasons].sort((a, b) => b.points_for - a.points_for || b.wins - a.wins);
