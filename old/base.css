@@ -1,0 +1,493 @@
+/* base */
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+body {
+    background: #F7F9FC;
+    color: #222;
+    font-weight: 300;
+}
+
+
+main {
+    /* margin: 20px; */
+    margin-top: 4em;
+    margin-bottom: 4em;
+    margin-left: 4em;
+    margin-right: 4em;
+}
+
+
+nav     {
+    background-color: #2c2e43;
+    color: white; 
+}
+
+.header-icon { 
+    height: 3em;
+}
+
+
+a.navbar-brand { 
+    color: white; 
+}
+
+ul.nav {
+    background-color: #f04349;
+    color: white;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover {
+    color: #2c2e43;
+}
+
+
+footer {
+    border-top: 1em solid #f04349;
+    background-color: #2c2e43;
+    color: white; 
+}
+
+
+.footer-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-icon {
+width:5em;
+}
+
+
+.footer-text {
+ /* font-family: 'Bebas Neue', cursive; */
+ letter-spacing: 1px;
+ /* font-size: 16px; */
+ font-weight: 500;
+}
+
+#big-table { 
+    border: .5px solid #434343 ;
+}
+/* Table */
+.main-table {
+    /* border: 1px solid black; */
+    /* margin-top:50px; */
+    /* width: 50vw; */
+    /* margin:50px;
+    padding: 20px; */
+    /* background-color: #fff; */
+    /* border-radius: 1rem; */
+    /* -webkit-box-shadow: 0px 10px 13px -7px grey, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: 0px 10px 13px -7px grey, 5px 5px 15px 5px rgba(0,0,0,0); */
+}
+
+
+th {
+    cursor: pointer;
+    font-weight: 400;
+    text-align: center;
+    z-index: 1;
+
+}
+
+thead {
+    /* -webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15);
+    box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.15); */
+}
+
+
+
+
+.champ-box { 
+    background-color: gold;
+    font-weight: 600;
+}
+
+/* FIXED TABLE HEADER  */
+.tableFixHead {
+    overflow-y: auto;
+    height: 60vh;
+
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: -1;
+    /* z-index: 100; */
+    background-color: #fff;
+    /* border-bottom: gray 1px solid; */
+}
+
+
+
+
+/* TH CLASSES  */
+
+th:first-child,
+td:nth-child(2) {
+    position: sticky;
+    left: 0px;
+    background-color: #f7f7f7;
+    border-right: gray 1px solid;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,5%);
+}
+
+.th-seasons-left {
+min-width: 38px;
+border-left: 1px solid gray;
+}
+
+
+.th-seasons-right {
+    min-width: 38px;
+    }
+
+
+.th-total-small {
+    background-color: black;
+}
+
+.th-season-year {
+    font-weight: bold;
+    font-size:.7em;
+}
+
+.th-win-perc 
+{min-width: 50px;}
+
+.th-season-number {
+    /* font-weight: bold; */
+    font-size:.7em;
+}
+.th-season-label {
+    color: gray;
+}
+
+.th-season-loss {
+    color: #E44F51;
+}
+
+.th-season-win {
+    color: green;
+}
+
+.th-trophy-case {
+text-align: left;
+}
+
+
+
+.th-odd {
+    background-color: #f1f1f1!important;
+ }
+
+
+.th-even {
+    background-color: #dcdcdc!important;
+ }
+
+/* TD CLASSES */
+
+.td-join-id {
+    font-size: .8em;
+}
+
+.td-join-year {
+    font-weight: bold;
+    font-size: .8em;
+}
+
+
+.td-manager {
+    z-index: 0;
+    background-color:#f1f1f1;
+    border-right: 1px solid gray; 
+    border-top: 1px solid gray; 
+} 
+.td-active {
+    font-size: 10px;
+    color: green;
+    font-weight: bold;
+}
+
+.td-season-w {
+    text-align: center;
+}
+
+.td-season-l {
+    border-right: gray 1px solid;
+    text-align: center;
+}
+
+.td-sea {
+    text-align: center;
+    border-right: rgb(176, 176, 176) solid 1px;
+border-left: rgb(176, 176, 176) solid 1px;
+}
+
+.td-gp {
+    text-align: center;
+}
+.td-seasons {
+    text-align: center;
+}
+
+.td-playoffs {
+    text-align: center;
+}
+
+.td-finals {
+    text-align: center;
+}
+
+.td-titles {
+    text-align: center;
+}
+
+.td-total-w {
+    text-align: center;
+    color:green;
+}
+
+.td-total-l {
+    text-align: center;
+    color:#E44F51;
+}
+
+.td-last {
+    text-align: center;
+}
+
+.td-win-perc {
+    text-align: center;
+}
+
+.td-hof {
+    text-align: center;
+}
+.td-rank {
+    text-align: center;
+}
+
+.asterick {
+    font-size: .7em;
+    color:black;
+}
+
+.border-champ {
+/* border: 1px solid #222; */
+font-weight: 500;
+background-color: gold;
+}
+
+.border-last {
+    /* border: 2px solid brown; */
+    font-weight: 500;
+    color: #fff;
+/* background-color: #C19A6B; */
+background-color: #C4A484;
+    }
+
+
+
+/* SORT */
+table.ex-2 {
+    min-width: 100px;
+}
+
+
+th.no-sort,
+th.no-sort:hover {
+    cursor: not-allowed;
+}
+
+th.sorted.ascending:after {
+    content: "  \2191";
+}
+
+th.sorted.descending:after {
+    content: " \2193";
+}
+
+.disabled {
+    opacity: 0.8;
+}
+
+.tophies-container {
+padding-top: 5px;
+}
+
+.trophies-flex {
+    display: flex;
+    padding: .5px;
+    /* flex-direction: column; */
+}
+.trophy-flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding:1.5px;
+}
+
+.td-showhide {
+    /* color: #fff; */
+    color: #000;
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.td-trophy-case {
+border-right: gray solid 1px;
+border-left: gray solid 1px;
+font-weight: 400;
+/* background-color: #3a3a3a; */
+/* color: #fff; */
+}
+
+.trophy-slot {
+    font-size: 1em;
+    color: #fff;   
+    fill:gold;
+}
+
+.trophy-year-text {
+    font-size: .5em;
+    /* color: #fff;  */
+    color: #000; 
+}
+
+.td-logo {
+    text-align: center;
+    min-width: 50px;
+    /* margin: 10px; */
+    /* max-width: 30px;
+    max-height: 30px; */
+    /* min-width: 30px;
+    min-height:30px; */
+    /* padding:4px; */
+}
+
+
+.flex-vert {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: row;
+}
+
+/* .gold {
+    color:red;
+} */
+
+
+
+.table-hover tbody tr:hover {
+    background-color: #fff;
+    color: #2c2e43;
+    font-weight: 600;
+}
+
+/* 
+.td-showhide:hover {
+    background-color: #8d8d8d;
+    color: white;  
+} */
+
+
+.table-legend {
+    color:white !important;
+    /* fill: white; */
+    border-radius: 4px;
+    padding:10px;
+    color:white;
+}
+
+.footer-link {
+    font-style: bold;
+    background-color:#2c2e43 ;
+        padding:10px;
+        color: white;
+        margin:10px;
+        border-radius: 4px;
+}
+
+
+a.footer-link:hover {
+    color:white;
+}
+
+
+.footer-link-troph {
+    font-style: bold;
+    background-color:gold ;
+        padding:10px;
+        color: #2c2e43;
+        margin:10px;
+        border-radius: 4px;
+}
+
+
+a.footer-link-troph:hover {
+    color:#2c2e43;
+}
+
+.league-name {
+    font-weight: bold;
+    color: white;
+}
+
+.sub-table {
+display: flex;
+}
+
+.hof-label {
+    font-weight: 700;
+    color: #2c2e43;
+}
+
+.hof-manager-label {
+    font-weight: 500;
+}
+
+
+.join {
+    background-color:#F7F9FC;
+    color:#f04349;
+    /* background-color: #f04349; */
+}
+
+.join-text {
+    color:#2c2e43;
+}
+
+
+.join:hover {
+    background-color:#2c2e43;
+    color:#F7F9FC !important;
+}
+
+
+.join-text:hover {
+    background-color:#2c2e43;
+    color:#F7F9FC !important;
+}
+
+
+.btn-secondary {
+    background-color:#2c2e43;
+    color:#F7F9FC !important;
+}

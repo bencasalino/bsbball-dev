@@ -1,0 +1,1295 @@
+ /* YEARS */
+
+ ._2008-09 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2009-10 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2010-11 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2011-12 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2012-13 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2013-14 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2014-15 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2015-16 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2016-17 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2017-18 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2018-19 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2019-20 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2020-21 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2021-22 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+ ._2022-23 {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+
+ ._year {
+   background: #EDEEF0;
+   color: #333333;
+ }
+
+
+ /* harsh */
+
+ .scale0 {
+   background: #e5383b;
+   color: #000;
+ }
+
+ .scale5 {
+   background: #e5383b;
+   color: #000;
+ }
+
+ .scale10 {
+   background: #e64447;
+   color: #000;
+ }
+
+ .scale15 {
+   background: #e44f51;
+   color: #000;
+ }
+
+ .scale20 {
+   background: #de6d6f;
+   color: #000;
+ }
+
+ .scale25 {
+   background: #de6d6f;
+   color: #000;
+ }
+
+ .scale30 {
+   background: #d58789;
+   color: #000;
+ }
+
+ .scale35 {
+   background: #d69798;
+   color: #000;
+ }
+
+ .scale40 {
+   background: #d8a4a5;
+   color: #000;
+ }
+
+ .scale45 {
+   background: #d8a4a5;
+   color: #000;
+ }
+
+ .scale50 {
+   background: #dbf9ec;
+   color: #000;
+ }
+
+ .scale55 {
+   background: #97eec7;
+   color: #000;
+ }
+
+ .scale60 {
+   background: #87ebbe;
+   color: #000;
+ }
+
+ .scale65 {
+   background: #65e6ac;
+   color: #000;
+ }
+
+ .scale70 {
+   background: #76e9b5;
+   color: #000;
+ }
+
+ .scale75 {
+   background: #54e3a3;
+   color: #000;
+ }
+
+ .scale80 {
+   background: #32de91;
+   color: #000;
+ }
+
+ .scale85 {
+   background: #32de91;
+   color: #000;
+ }
+
+ /* .scale90 {background: #32de91; color:#000; }
+  .scale95 {background: #32de91; color:#000; } */
+
+ /* wins */
+ .w0 { background:#DDF9F4; color:#000; }
+ .w1 { background: #D4F7F0; color:#000; }
+ .w2 { background: #CAF6EB; color:#000; }
+ .w3 { background:#C0F5E6 ; color:#000; }
+ .w4 { background:#B7F4E0 ; color:#000; }
+ .w5 { background: #ADF3DA; color:#000; }
+ .w6 { background: #A3F2D3; color:#000; }
+ .w7 { background:#99F1CB ; color:#000; }
+ .w8 { background: #8EF1C2; color:#000; }
+ .w9 { background: #84F0B9; color:#000; }
+ .w10{ background:#79F0AF ; color:#000; }
+ .w11{ background:#6FF0A5 ; color:#000; }
+ .w12{ background: #64F099; color:#000; }
+ .w13{ background: #59F08D; color:#000; }
+ .w14{ background: #4EF07F; color:#000; }
+ .w15{ background: #43F071; color:#000; }
+ .w16{ background: #43F071; color:#000; }
+ .w17{ background: #43F071; color:#000; }
+ .w18{ background: #43F071; color:#000;  }
+
+
+
+ .l0{ background: #FFEFF7; color:#000;  }
+ .l1  { background: #FFEFF7; color:#000;  }
+ .l2  { background: #FFE1EF; color:#000;  }
+ .l3  { background: #FFD3E6; color:#000;  }
+ .l4  { background: #FFC6DC; color:#000;  }
+ .l5  { background:#FFB9D2 ; color:#000;  }
+ .l6  { background: #FFACC6; color:#000;  }
+ .l7  { background: #FFA0BB; color:#000;  }
+ .l8  { background: #FE93AE; color:#000;  }
+ .l9  { background:#FC87A1 ; color:#000;  }
+ .l10  { background: #FB7B93; color:#000;  }
+ .l11  { background: #F96F85; color:#000;  }
+ .l12  { background: #F76477; color:#000;  }
+ .l13  { background:#F55968 ; color:#000;  }
+ .l14  { background:#F34E59 ; color:#000;  }
+ .l15  { background:#f04349 ; color:#000;  }
+ .l16  { background: #f04349; color:#000;  }
+ .l17  { background:#f04349 ; color:#000;  }
+ .l18  { background:#f04349 ; color:#000;  }
+
+
+
+
+
+
+
+
+ /* loss */
+ /* .l0 {
+   background: #fdf7f8;
+   color: #000;
+ }
+
+ .l1 {
+   background: #fcedee;
+   color: #000;
+ }
+
+ .l2 {
+   background: #fcedee;
+   color: #000;
+ }
+
+ .l3 {
+   background: #f9d5d5;
+   color: #000;
+ }
+
+ .l4 {
+   background: #f9d5d5;
+   color: #000;
+ }
+
+ .l5 {
+   background: #f3b3b4;
+   color: #000;
+ }
+
+ .l6 {
+   background: #f3b3b4;
+   color: #000;
+ }
+
+ .l7 {
+   background: #ee9091;
+   color: #000;
+ }
+
+ .l8 {
+   background: #e96f70;
+   color: #000;
+ }
+
+ .l9 {
+   background: #de6d6f;
+   color: #000;
+ }
+
+ .l10 {
+   background: #e44f51;
+   color: #fff;
+ }
+
+ .l11 {
+   background-color: #e44f51;
+   color: #fff;
+ }
+
+ .l12 {
+   background: #c24345;
+   color: #fff;
+ }
+
+ .l13 {
+   background: #c24345;
+   color: #fff;
+ }
+
+ .l14 {
+   background: #a2383a;
+   color: #fff;
+ }
+
+ .l15 {
+   background: #822d2e;
+   color: #fff;
+ }
+
+ .l16 {
+   background: #822d2e;
+   color: #fff;
+ }
+
+ .l17 {
+   background: #672424;
+   color: #fff;
+ }
+
+ .l18 {
+   background: #672424;
+   color: #fff;
+ } */
+
+ /* .l0 {
+  background: #FFE9D9;
+  color: #000;
+}
+
+.l1 {
+  background: #FFE9D9;
+  color: #000;
+}
+
+.l2 {
+  background:#FFE3D0 ;
+  color: #000;
+}
+
+.l3 {
+  background:#FFC1A9 ;
+  color: #000;
+}
+
+.l4 {
+  background: #FEB9A2;
+  color: #000;
+}
+
+.l5 {
+  background: #FBAA93;
+  color: #000;
+}
+
+.l6 {
+  background:#FAA28C ;
+  color: #000;
+}
+
+.l7 {
+  background: #F99985;
+  color: #000;
+}
+
+.l8 {
+  background: #F7917F;
+  color: #000;
+}
+
+.l9 {
+  background: #F58978;
+  color: #000;
+}
+
+.l10 {
+  background:#F38072 ;
+  color: #000;
+}
+
+.l11 {
+  background-color:#F1786C ;
+  color: #000;
+}
+
+.l12 {
+  background:#EF6F66;
+  color: #000;
+}
+
+.l13 {
+  background: #EC6760;
+  color: #000;
+}
+
+.l14 {
+  background: #EA5E5A;
+  color: #000;
+}
+
+.l15 {
+  background: #E75654;
+  color: #000;
+}
+
+.l16 {
+  background: #E44F51;
+  color: #000;
+}
+
+.l17 {
+  background: #E44F51;
+  color: #000;
+}
+
+.l18 {
+  background: #E44F51;
+  color: #000;
+} */
+
+
+
+
+
+
+
+ /* colors */
+
+ .gold-2 {
+   background: red;
+   fill: blue;
+ }
+
+ .gold {
+   background: gold;
+   color: #202020;
+ }
+
+ .silver {
+   background: silver;
+   color: #202020;
+ }
+
+
+ .pl-second {
+  fill: silver;
+  color: #202020;
+ }
+
+ .pl-third {
+  fill: #b08d57;
+  color: #202020;
+ }
+
+ .pl-forth {
+  fill:  rgb(209, 209, 251);
+  color: #202020;
+ }
+
+
+ .color-first {
+  background-color: gold;
+  color: #202020;
+  font-size: .8em;
+  font-weight: 300;
+  padding: .4em;
+  border-radius: 100%;
+ }
+
+
+ .color-second {
+  background-color: silver;
+  color: #202020;
+  font-size: .8em;
+  font-weight: 300;
+  padding: .4em;
+  border-radius: 100%;
+ }
+
+.color-third {
+  background-color: #d2bea5;
+  color: #202020;
+  font-size: .8em;
+  font-weight: 300;
+  padding: .4em;
+  border-radius: 100%;
+ }
+
+ .color-four {
+  background-color:#d0cbff;
+  color: #202020;
+  font-size: .8em;
+  font-weight: 300;
+  padding: .4em;
+  border-radius: 100%;
+ }
+
+
+ .color-total {
+  /* background-color:#2c2e43; */
+  color: #2c2e43;
+  font-size:1em;
+  font-weight: 400;
+  padding: .2em;
+  border-radius: 100%;
+ }
+
+ .pl-forth {
+  fill:  #d0cbff;
+  color: #202020;
+ }
+
+ .bronze {
+   background: #d2bea5;
+   color: #202020;
+ }
+
+ .forth {
+   background:  rgb(209, 209, 251);
+   fill: rgb(209, 209, 251);
+   color: #202020;
+ }
+
+ .pl {
+   background: #7EB2E6;
+   color: #202020;
+ }
+
+ .playoffs {
+   background: #f1f2f2;
+   color: #202020;
+ }
+
+ .color-gold {
+   color: gold;
+ }
+
+ .color-silver {
+   color: silver;
+ }
+
+ .color-bronze {
+   color: #d2bea5;
+ }
+
+ .color-forth {
+   color:  rgb(209, 209, 251);;
+ }
+
+ .color-pl {
+   color: #f1f2f2;
+ }
+
+ .color-steal {
+   color: gold;
+ }
+
+ .color-black {
+   color: black;
+ }
+
+ .color-white {
+   background: white;
+   color: black;
+ }
+
+ .color-rsc {
+   color: gold;
+ }
+
+ .fa-crown {
+   color: gold;
+ }
+
+ .fa-poop {
+   color: #987654;
+ }
+
+ .color-mip {
+   color: #1acdda;
+ }
+
+ .color-roy {
+   color: rgb(137, 68, 214);
+ }
+
+ .fa-award {
+   color: gold;
+ }
+
+ .color-poop {
+   color: #987654;
+ }
+
+ .color-draft {
+   color: #ee6c4d;
+ }
+
+ .color-ten {
+   color: gold;
+ }
+
+ .td-rs-gp {
+   background: #f1f2f2;
+   color: black;
+ }
+
+ .bg-last {
+background-color: #795C32;
+   color: #202020;
+ }
+
+ .bg-roy {
+   background: rgb(137, 68, 214);
+   ;
+   color: #202020;
+ }
+
+ .bg-mip {
+   background: #1acdda;
+   color: #202020;
+ }
+
+ .ninja {
+   background: silver;
+   color: #202020;
+ }
+
+ .fort {
+   background: #ee6c4d;
+   color: #202020;
+ }
+
+ .crown {
+   background: gold;
+   color: #202020;
+ }
+
+ /* teams */
+ .atl {
+   background: #E03A3E;
+   color: #C1D32F;
+ }
+
+ .bos {
+   background: #007A33;
+   color: #BA9653;
+ }
+
+ .bkn {
+   background: #000;
+   color: #fff;
+ }
+
+ .cha {
+   background: #00788C;
+   color: #1D1160;
+ }
+
+ .chi {
+   background: #fff;
+   color: #CE1141;
+ }
+
+ .cle {
+   background: #860038;
+   color: #FDBB30;
+ }
+
+ .dal {
+   background: #00843D;
+   color: #002855;
+ }
+
+ .den {
+   background: #0E2240;
+   color: #FEC524;
+ }
+
+ .det {
+   background: #1D42BA;
+   color: #fff;
+ }
+
+ .gsw {
+   background: #FFC72C;
+   color: #1D428A;
+ }
+
+ .hou {
+   background: #CE1141;
+   color: #fff;
+ }
+
+ .ind {
+   background: #FDBB30;
+   color: #002D62;
+ }
+
+ .lac {
+   background: #1D428A;
+   color: #fff;
+ }
+
+ .lal {
+   background: #552583;
+   color: #FDB927;
+ }
+
+ .mep {
+   background: #5D76A9;
+   color: #12173F;
+ }
+
+ .mia {
+   background: #000;
+   color: #DB3EB1;
+ }
+
+ .mil {
+   background: #00471B;
+   color: #EEE1C6;
+ }
+
+ .nyk {
+   background: #006BB6;
+   color: #F58426;
+ }
+
+ .min {
+   background: #78BE20;
+   color: #0C2340;
+ }
+
+ .nop {
+   background: #0C2340;
+   color: #85714D;
+ }
+
+ .okc {
+   background: #007AC1;
+   color: #FDBB30;
+ }
+
+ .orl {
+   background: #000;
+   color: #0077C0;
+ }
+
+ .phi {
+   background: #0077C0;
+   color: #C4CED4;
+ }
+
+ .phx {
+   background: #1D1160;
+   color: #E56020;
+ }
+
+ .por {
+   background: #000;
+   color: #E03A3E;
+ }
+
+ .sac {
+   background: #5A2D81;
+   color: #fff;
+ }
+
+ .sas {
+   background: #000000;
+   color: #8A8D8F;
+ }
+
+ .tor {
+   background: #753BBD;
+   color: #fff;
+ }
+
+ .uta {
+   background: #00471B;
+   color: #F9A01B;
+ }
+
+ .was {
+   background: #002B5C;
+   color: #C4CED4;
+ }
+
+
+ /* team colors */
+ .fill-ajp {
+   background-color: #c04277;
+   fill: #1c0055;
+   border: 2px solid #1c0055;
+   padding: 5px;
+   width: 2em;
+ }
+
+ .fill-adams {
+   background-color: #616dc8;
+   fill: #ffffff;
+   border: 2px solid #c7c7c7;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-andym {
+   background-color: #79ead9;
+   fill: #031c05;
+   border: 2px solid #031c05;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-chadd {
+   background-color: #ececec;
+   fill: #ff4d00;
+   border: 2px solid #ff4d00;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-alekm {
+   background-color: #3ae090;
+   fill: #1f1e1e;
+   border: 2px solid #1f1e1e;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-adamb {
+   background-color: #222;
+   fill: #E03A3E;
+   border: 2px solid #E03A3E;
+   padding: 4px;
+   width: 2em;
+
+ }
+
+
+ .fill-benc {
+   background-color: #275ed4;
+   fill: #C39E6D;
+   border: 2px solid #C39E6D;
+   width: 2em;
+   padding: 4px;
+ }
+
+
+
+ .fill-brendani {
+  background-color: #714eff;
+   fill: #f4feff;
+   border: 2px solid #f4feff;
+   padding: 4px;
+   width: 2em;
+
+ }
+
+ .fill-burgesm {
+   background-color:#ff2e2e;
+   fill: #f5ff2e;
+   border: 2px solid #f5ff2e;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-carlos {
+   background-color: #006BB6;
+   fill: #F58426;
+   border: 2px solid #F58426;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-chrisl {
+   background-color: #0C2340;;
+   fill: #78BE20;
+   border: 2px solid #78BE20;
+   width: 2em;
+   padding: 2px;
+ }
+
+ .fill-dannyr {
+   background-color: #006D75;
+   fill: #f1f2f2;
+   border: 2px solid #f1f2f2;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-connorf {
+   background-color: #c3c3c3;
+   fill: #120536;
+   border: 2px solid #120536;
+   width: 2em;
+   padding: 2px;
+ }
+
+ .fill-jamesc {
+   background-color: #f4c25e;
+   fill: #48536d;
+   border: 2px solid #48536d;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-jeremyh {
+   background-color: #12191c;
+   fill: #f4cf9f;
+   border: 2px solid #f4cf9f;
+   padding: 6px;
+   width: 2em;
+ }
+
+ .fill-jesss {
+   background-color: #000000;
+   fill: #bebebe;
+   border: 2px solid #bebebe;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-jesusz {
+   background-color: #c2f412;
+   fill: #000;
+   border: 2px solid #000;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-justinb {
+   background-color: #d1d1d5;
+   fill: #570101;
+   border: 2px solid #570101;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-kennyw {
+   background-color: #C8102E ;
+   fill: #fff;
+   border: 2px solid #1f1e1e;
+   padding: 4px;
+   width: 2em;
+ }
+
+
+
+ .fill-garyq {
+   background-color: #17562C;
+   fill: #fff;
+   border: 2px solid #1f1e1e;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-bradyl {
+   background-color: #007A33;
+   fill: #e7e7e7;
+   border: 2px solid #e7e7e7;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-kristenm {
+   background-color: #db3eb1;
+   fill: #333;
+   border: 2px solid #333;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-jon {
+   background-color: #e56020;
+   fill: #1d1160;
+   border: 2px solid #1d1160;
+   width: 2em;
+   padding: 5px;
+ }
+
+ .fill-langstonq {
+   background-color: #00788C;
+   fill: #FDB927;
+   border: 2px solid #FDB927;
+   padding: 4px;
+   width: 2em;
+ }
+
+
+
+ .fill-dakotad {
+   background-color: #3473b2;
+   fill: #a6ff33;
+   border: 2px solid #a6ff33;
+   padding: 5px;
+   width: 2em;
+ }
+
+
+ .fill-jordanf {
+   background-color: #f7b5cd;
+   fill: #231f20;
+   border: 2px solid #231f20;
+   width: 2em;
+   padding: 4px;
+ }
+
+
+ .fill-jordane {
+   background-color: #0038A8;
+   fill: #ffd100;
+   border: 2px solid #ffd100;
+   width: 2em;
+   padding: 5px;
+ }
+
+
+ .fill-jordanm {
+   background-color:#BA9653;
+   fill: #f9fbef;
+   border: 2px solid #f9fbef;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-marccop {
+   background-color: #ffe346;
+   fill: #4530fd;
+   border: 2px solid #4530fd;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-craigl {
+   background-color: #ed5959;
+   fill: #041e06;
+   border: 2px solid #041e06;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-eddev {
+   background-color: #ace4ee;
+   fill: #007610;
+   border: 2px solid #007610;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-joshm {
+   background-color: #2e2d2c;
+   fill: #FCB514;
+   border: 2px solid #FCB514;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-jamesv {
+   background-color: #C1D32F;
+   fill: #26282A;
+   border: 2px solid #26282A;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-jasonb {
+   background-color: #2e2d2c;
+   fill: #FCB514;
+   border: 2px solid #FCB514;
+   width: 2em;
+   padding: 4px;
+ }
+
+
+ .fill-leet {
+   background-color: #ffa449;
+   fill: #1f099d;
+   border: 2px solid #1f099d;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-markd {
+   background-color: #0062ff;
+   fill: #d4d4d4;
+   border: 2px solid #d4d4d4;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-mateoe {
+   background-color: #007ac1;
+   fill: #fff;
+   border: 2px solid #fff;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-matts {
+   background-color: #12173F;
+   fill: #FDBB30;
+   border: 2px solid #FDBB30;
+   padding: 6px;
+   width: 2em;
+ }
+
+ .fill-myless {
+   background-color: #BD3039;
+   fill: #0C2340;
+   border: 2px solid #0C2340;
+   padding: 6px;
+   width: 2em;
+ }
+
+ .fill-paulr {
+   background-color: #EEE1C6;
+   fill: #00471B;
+   border: 2px solid #00471B;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-preetg {
+   background-color: #ff4492;
+   fill: #0008a0;
+   border: 2px solid #0008a0;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-kyle {
+   background-color: #003366;
+   fill: #AB0520;
+   border: 2px solid #AB0520;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-lamarr {
+   background-color: #F9A01B;
+   fill: #98002E;
+   border: 2px solid #98002E;
+   width: 2em;
+   padding: 4px;
+ }
+
+
+ .fill-rafa {
+   background-color: #00653a;
+   fill: #ffc200;
+   border: 2px solid #ffc200;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-ryanz {
+   background-color: #CE1141;
+   fill: #fff;
+   border: 2px solid #fff;
+   width: 2em;
+   padding: 5px;
+
+ }
+
+ .fill-robbieb {
+   background-color: #ffdc2c;
+   fill: #ff6200fb;
+   border: 2px solid #ff6200fb;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-robertl {
+   background-color:#C4CED4 ;
+   fill: #24135F ;
+   border: 2px solid #24135F;
+   padding: 4px;
+   width: 2em;
+ }
+
+
+ .fill-peter {
+   background-color: #ba76e4;
+   fill: #ebebeb;
+   border: 2px solid #ebebeb;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-rudyv {
+   background-color: #99d9d9;
+   fill: #355464;
+   border: 2px solid #355464;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-tophasa {
+   background-color: #8B634B;
+   fill: #fff;
+   border: 2px solid #fff;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-tyler {
+   background-color: #7ccf87;
+   fill: #062b02;
+   border: 2px solid #062b02;
+   width: 2em;
+   padding: 4px;
+
+ }
+
+ .fill-tannerl {
+   background-color: #041E42;
+   fill: #fff;
+   border: 2px solid #fff;
+   width: 2em;
+   padding: 4px;
+ }
+
+ .fill-scottb {
+  background-color: #ced4d7;
+   fill: #0077c0;
+   border: 2px solid #0077c0;
+   padding: 4px;
+
+ }
+
+ .fill-scottm {
+   background-color: #0C2340;
+   fill: #F5D130;
+   border: 2px solid #F5D130;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-seanw {
+   background-color: #8df163;
+   fill: #000000;
+   border: 2px solid #000000;
+   padding: 4px;
+   width: 2em;
+ }
+
+
+ .fill-zachl {
+   background-color: #090511;
+   fill: #ffb5b5;
+   border: 2px solid #ffb5b5;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-ryanc {
+   background-color: #0a5932;
+   fill: #0eff0a;
+   border: 2px solid #0eff0a;
+   padding: 4px;
+   width: 2em;
+ }
+
+ .fill-adrianf {
+   background-color: #860038;
+   fill: #FDBB30;
+   border: 2px solid #FDBB30;
+   padding: 4px;
+   width: 2em;
+ }
+
+
+
+ .fill-zachz {
+   background-color: #154733;
+   fill: #FEE123;
+   border: 2px solid #FEE123;
+   width: 2em;
+   padding: 6px;
+ }
+
+ .fill-yacineb {
+   background-color: #000;
+   fill: #db3eb1;
+   border: 2px solid #41b6e6;
+   width: 2em;
+   padding: 6px;
+ }
