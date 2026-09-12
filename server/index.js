@@ -211,57 +211,68 @@ function getSeasonSummaries() {
 }
 
 function getSeasonDetail(seasonId) {
-  const season = getDbInstance().prepare('SELECT * FROM seasons WHERE season_id = ?').get(seasonId);
-  if (!season) return null;
+  console.log(`[getSeasonDetail] Executing query for season_id = ${seasonId}`);
+  try {
+    const dbInstance = getDbInstance();
+    console.log(`[getSeasonDetail] DB connection status: ${dbInstance ? 'CONNECTED' : 'FAILED'}`);
+    const season = dbInstance.prepare('SELECT * FROM seasons WHERE season_id = ?').get(seasonId);
+    console.log(`[getSeasonDetail] Query 'SELECT * FROM seasons WHERE season_id = ${seasonId}' returned:`, season || 'NONE (NULL)');
+    if (!season) return null;
 
-  const champion = getDbInstance().prepare(
-    `SELECT m.manager_id, m.name
-     FROM awards a
-     JOIN award_types at ON at.award_id = a.award_id
-     JOIN managers m ON m.manager_id = a.manager_id
-     WHERE a.season_id = ? AND at.name = 'Championship'
-     LIMIT 1`
-  ).get(seasonId) || null;
+    const champion = dbInstance.prepare(
+      `SELECT m.manager_id, m.name
+       FROM awards a
+       JOIN award_types at ON at.award_id = a.award_id
+       JOIN managers m ON m.manager_id = a.manager_id
+       WHERE a.season_id = ? AND at.name = 'Championship'
+       LIMIT 1`
+    ).get(seasonId) || null;
 
-  const standings = getDbInstance().prepare(
-    `SELECT
-      sr.manager_id,
-      m.name AS manager_name,
-      m.team_logo,
-      m.team_color_1,
-      m.team_color_2,
-      sr.wins,
-      sr.losses,
-      sr.ties,
-      sr.points_for,
-      sr.regular_season_rank,
-      sr.playoffs_made,
-      CASE WHEN sr.regular_season_rank <= 8 THEN 1 ELSE 0 END AS computed_playoffs_made,
-      (
-        SELECT COUNT(*)
-        FROM season_results sr2
-        WHERE sr2.season_id = sr.season_id
-      ) AS total_managers
-     FROM season_results sr
-     JOIN managers m ON m.manager_id = sr.manager_id
-     WHERE sr.season_id = ?
-     ORDER BY sr.regular_season_rank ASC, sr.wins DESC, sr.points_for DESC`
-  ).all(seasonId).map((row) => ({
-    ...row,
-    wins: safeNumber(row.wins),
-    losses: safeNumber(row.losses),
-    ties: safeNumber(row.ties),
-    points_for: safeNumber(row.points_for),
-    regular_season_rank: safeNumber(row.regular_season_rank),
-    playoffs_made: Boolean(row.playoffs_made) || safeNumber(row.computed_playoffs_made) === 1 || safeNumber(row.regular_season_rank) <= Math.min(8, safeNumber(row.total_managers)),
-  }));
+    const standings = dbInstance.prepare(
+      `SELECT
+        sr.manager_id,
+        m.name AS manager_name,
+        m.team_logo,
+        m.team_color_1,
+        m.team_color_2,
+        sr.wins,
+        sr.losses,
+        sr.ties,
+        sr.points_for,
+        sr.regular_season_rank,
+        sr.playoffs_made,
+        CASE WHEN sr.regular_season_rank <= 8 THEN 1 ELSE 0 END AS computed_playoffs_made,
+        (
+          SELECT COUNT(*)
+          FROM season_results sr2
+          WHERE sr2.season_id = sr.season_id
+        ) AS total_managers
+       FROM season_results sr
+       JOIN managers m ON m.manager_id = sr.manager_id
+       WHERE sr.season_id = ?
+       ORDER BY sr.regular_season_rank ASC, sr.wins DESC, sr.points_for DESC`
+    ).all(seasonId).map((row) => ({
+      ...row,
+      wins: safeNumber(row.wins),
+      losses: safeNumber(row.losses),
+      ties: safeNumber(row.ties),
+      points_for: safeNumber(row.points_for),
+      regular_season_rank: safeNumber(row.regular_season_rank),
+      playoffs_made: Boolean(row.playoffs_made) || safeNumber(row.computed_playoffs_made) === 1 || safeNumber(row.regular_season_rank) <= Math.min(8, safeNumber(row.total_managers)),
+    }));
 
-  return {
-    season,
-    champion,
-    manager_count: standings.length,
-    standings,
-  };
+    console.log(`[getSeasonDetail] Standings query for season_id = ${seasonId} returned ${standings.length} rows.`);
+
+    return {
+      season,
+      champion,
+      manager_count: standings.length,
+      standings,
+    };
+  } catch (err) {
+    console.error(`[getSeasonDetail] ERROR querying season_id = ${seasonId}:`, err);
+    throw err;
+  }
 }
 
 function getRecordBookData() {
@@ -468,10 +479,23 @@ app.get('/api/seasons', (req, res) => {
 });
 
 app.get('/api/seasons/:id', (req, res) => {
-  if (!requireDb(res)) return;
-  const detail = getSeasonDetail(req.params.id);
-  if (!detail) return res.status(404).json({ error: 'Season not found' });
-  res.json(detail);
+  console.log(`[API ROUTE] GET /api/seasons/${req.params.id}`);
+  if (!requireDb(res)) {
+    console.log(`[API ROUTE] GET /api/seasons/${req.params.id} -> 500 DB connection failed`);
+    return;
+  }
+  try {
+    const detail = getSeasonDetail(req.params.id);
+    if (!detail) {
+      console.log(`[API ROUTE] GET /api/seasons/${req.params.id} -> 404 Season not found`);
+      return res.status(404).json({ error: 'Season not found' });
+    }
+    console.log(`[API ROUTE] GET /api/seasons/${req.params.id} -> 200 OK`);
+    res.json(detail);
+  } catch (err) {
+    console.error(`[API ROUTE] GET /api/seasons/${req.params.id} -> 500 Exception:`, err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/api/seasons/:id/results', (req, res) => {
