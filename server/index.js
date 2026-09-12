@@ -18,6 +18,7 @@ app.use('/fonts', express.static(path.join(ROOT, 'fonts')));
 app.use('/images', express.static(path.join(ROOT, 'images')));
 
 let db = null;
+let lastDbError = null;
 
 function getDbInstance() {
   if (db) return db;
@@ -29,6 +30,7 @@ function getDbInstance() {
       initDb();
     } catch (err) {
       console.error('Failed to auto-initialize DB:', err);
+      lastDbError = err.message;
     }
   }
   try {
@@ -36,6 +38,7 @@ function getDbInstance() {
     console.log('Opened database at', DB_PATH);
   } catch (err) {
     console.warn('Could not open database at', DB_PATH, '-', err.message);
+    lastDbError = err.message;
     db = null;
   }
   return db;
@@ -45,11 +48,17 @@ function getDbInstance() {
 getDbInstance();
 
 function requireDb(res) {
-  if (!getDbInstance()) {
-    res.status(500).json({ error: 'Database not initialized. Run `npm run init-db` first.' });
+  try {
+    const instance = getDbInstance();
+    if (!instance) {
+      res.status(500).json({ error: `Database error: ${lastDbError || 'data/league.db not found'}` });
+      return false;
+    }
+    return true;
+  } catch (err) {
+    res.status(500).json({ error: `Database exception: ${err.message || String(err)}` });
     return false;
   }
-  return true;
 }
 
 function safeNumber(value) {

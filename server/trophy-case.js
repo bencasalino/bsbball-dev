@@ -30,12 +30,14 @@ function number(value) {
 
 function seasonAwardCodes(row, bestRank, lastRank) {
   const codes = [];
+  const totalGames = number(row.wins) + number(row.losses) + number(row.ties);
+  const hasPlayed = (row.wins == null && row.losses == null) || totalGames > 0;
   if (row.champion) codes.push('CHAMPIONSHIP');
   if (row.playoff_finish === 2 || (row.playoffs_made && row.regular_season_rank === 2 && !row.champion)) codes.push('RUNNER_UP');
   if (row.playoff_finish === 3 || (row.playoffs_made && row.regular_season_rank === 3 && !row.champion)) codes.push('THIRD_PLACE');
   if (row.playoffs_made && !row.champion && row.playoff_finish !== 2 && row.playoff_finish !== 3 && ![2, 3].includes(row.regular_season_rank)) codes.push('PLAYOFF_APPEARANCE');
-  if (row.regular_season_rank === bestRank) codes.push('BEST_REGULAR_SEASON');
-  if (row.regular_season_rank === lastRank) codes.push('LAST_PLACE');
+  if (hasPlayed && row.regular_season_rank === bestRank) codes.push('BEST_REGULAR_SEASON');
+  if (hasPlayed && row.regular_season_rank === lastRank) codes.push('LAST_PLACE');
   return codes;
 }
 
@@ -288,15 +290,16 @@ function getCareerTrajectoryData(db, managerId) {
   let cumulativeGoatScore = 0;
   const seasons = normalizedRows.map((row) => {
     const playoffFinish = effectivePlayoffFinish(row);
+    const hasPlayed = (row.wins + row.losses + row.ties) > 0;
     const seasonBreakdown = {
       championships: row.champion ? 1 : 0,
       runner_ups: playoffFinish === 2 ? 1 : 0,
       third_places: playoffFinish === 3 ? 1 : 0,
-      best_regular_seasons: row.regular_season_rank === 1 ? 1 : 0,
+      best_regular_seasons: hasPlayed && row.regular_season_rank === 1 ? 1 : 0,
       playoff_appearances: row.playoffs_made ? 1 : 0,
       regular_season_wins: row.wins,
       seasons_played: 1,
-      last_places: row.is_last_place ? 1 : 0,
+      last_places: hasPlayed && row.is_last_place ? 1 : 0,
     };
     const { goatScore: goatPointsEarned } = calculateGoatScore(seasonBreakdown);
     cumulativeGoatScore += goatPointsEarned;

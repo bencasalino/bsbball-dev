@@ -214,6 +214,18 @@ const canonicalRows = `
 2026|10|David Miguel|David's Dangerous Team|7|9|0|0|0
 2026|11|Scott Berlin|Stumpy's Soldiers|1|15|0|0|0
 2026|12|Gavin Jackson|Deep 3 Mob|2|14|0|0|0
+2027|1|Jonathan Hennke|WinDy CitY ChaMp|0|0|0|0|0
+2027|2|Ben Casalino|Barles Charkley|0|0|0|0|0
+2027|3|Adam Bernert|Stone Rockz|0|0|0|0|0
+2027|4|Kyle Kelly|DC Kings|0|0|0|0|0
+2027|5|Rafa Soto|Crab People|0|0|0|0|0
+2027|6|Tyrell Reid|Tyrell's Top Team|0|0|0|0|0
+2027|7|Lee Trapp|Fear the Beard|0|0|0|0|0
+2027|8|Rudy Vasquez|Load Management Inc.|0|0|0|0|0
+2027|9|Conner Fischer|Aunt 'Tifah|0|0|0|0|0
+2027|10|David Miguel|David's Dangerous Team|0|0|0|0|0
+2027|11|Scott Berlin|Stumpy's Soldiers|0|0|0|0|0
+2027|12|Gavin Jackson|Deep 3 Mob|0|0|0|0|0
 `.trim();
 
 const identityAliases = {

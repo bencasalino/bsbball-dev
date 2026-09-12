@@ -1,4 +1,3 @@
 node_modules/
-data/league.db
 .DS_Store
 /.env
