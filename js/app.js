@@ -2,12 +2,13 @@ const appContainer = document.getElementById('app');
 
 const navigationItems = [
   { path: '/', label: 'League' },
-  { path: '/leaders', label: 'League Leaders' },
   { path: '/seasons', label: 'Seasons' },
   { path: '/trophy-case', label: 'Trophy Case' },
   { path: '/hall-of-fame', label: 'Hall of Fame' },
   { path: '/record-book', label: 'Record Book' },
   { path: '/goat', label: 'GOAT Rankings' },
+  { path: '/career-trajectories', label: 'Careers' },
+  { path: '/seasons/20', label: 'Season 20' },
 ];
 
 const leaderColumns = [
@@ -153,7 +154,7 @@ function setActiveNavigation() {
     const href = linkElement.getAttribute('href');
     const isActive = href === '/'
       ? currentPath === '/'
-      : currentPath === href || currentPath.startsWith(`${href}/`);
+      : currentPath === href;
     linkElement.classList.toggle('is-active', isActive);
   });
 }
@@ -374,18 +375,20 @@ function renderSeasonsList(seasons) {
     <div class="table-shell season-finish-table-wrap">
       <table class="table data-table season-finish-table align-middle mb-0">
         <thead><tr><th>Season</th>${Array.from({ length: maxFinishers }, (_, index) => `<th>${index + 1}</th>`).join('')}</tr></thead>
-        <tbody>${seasons.map((season) => `<tr><th scope="row">S${season.season_number} · ${escapeHtml(String(season.year))}</th>${Array.from({ length: maxFinishers }, (_, index) => `<td>${renderFinisher(season.finishers[index])}</td>`).join('')}</tr>`).join('')}</tbody>
+        <tbody>${seasons.map((season) => {
+          const isSeason20 = season.season_number === 20;
+          return `<tr><th scope="row">S${season.season_number} · ${escapeHtml(String(season.year))}</th>${Array.from({ length: maxFinishers }, (_, index) => `<td>${isSeason20 ? '—' : renderFinisher(season.finishers[index])}</td>`).join('')}</tr>`;
+        }).join('')}</tbody>
       </table>
     </div>
   `;
   const seasonCards = seasons.map((season) => {
-    const top3 = (season.finishers || []).slice(0, 3);
-    const champion = top3[0] ? escapeHtml(shortenManagerName(top3[0].manager_name)) : 'TBD';
-    const championLogo = top3[0]
+    const isSeason20 = season.season_number === 20;
+    const top3 = isSeason20 ? [] : (season.finishers || []).slice(0, 3);
+    const champion = isSeason20 ? 'TBD' : (top3[0] ? escapeHtml(shortenManagerName(top3[0].manager_name)) : 'TBD');
+    const championLogo = (!isSeason20 && top3[0])
       ? `<span class="team-logo season-card__champion-logo" style="--team-color-1: ${escapeHtml(top3[0].team_color_1)}; --team-color-2: ${escapeHtml(top3[0].team_color_2)}" title="${escapeHtml(top3[0].manager_name)}"><i class="${escapeHtml(top3[0].team_logo)}" aria-hidden="true"></i></span><small class="season-card__champion-name">${champion}</small>`
       : '';
-    const runnerUp = top3[1] ? escapeHtml(shortenManagerName(top3[1].manager_name)) : '—';
-    const third = top3[2] ? escapeHtml(shortenManagerName(top3[2].manager_name)) : '—';
 
     return `
       <a class="season-card" href="/seasons/${season.season_id}" data-route>
@@ -397,7 +400,7 @@ function renderSeasonsList(seasons) {
         <div class="season-card__col season-card__col--middle">
           <div class="season-card__summary">
             <div><strong><i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i> Champion</strong> ${champion}</div>
-            <div><strong>Winning Record</strong> ${escapeHtml(season.winning_record || 'No results yet')}</div>
+            <div><strong>Winning Record</strong> ${isSeason20 ? 'Open' : escapeHtml(season.winning_record || 'No results yet')}</div>
           </div>
         </div>
         <div class="season-card__col season-card__col--champion-logo">${championLogo}</div>
@@ -416,14 +419,15 @@ function renderSeasonsList(seasons) {
 }
 
 function renderSeasonDetail(detail) {
+  const isSeason20 = detail.season.season_number === 20;
   const rows = detail.standings.length
     ? detail.standings.map((row) => `
       <tr>
-        <td>${row.regular_season_rank || '—'}</td>
+        <td>${isSeason20 ? '—' : (row.regular_season_rank || '—')}</td>
         <td><span class="team-logo" style="--team-color-1: ${escapeHtml(row.team_color_1)}; --team-color-2: ${escapeHtml(row.team_color_2)}" title="${escapeHtml(row.manager_name)}"><i class="${escapeHtml(row.team_logo)}" aria-hidden="true"></i></span></td>
         <td><strong>${escapeHtml(shortenManagerName(row.manager_name))}</strong></td>
         <td>${formatRecord(row.wins, row.losses, row.ties)}</td>
-        <td>${row.playoffs_made ? 'Yes' : 'No'}</td>
+        <td>${isSeason20 ? 'No' : (row.playoffs_made ? 'Yes' : 'No')}</td>
       </tr>
     `).join('')
     : '<tr><td colspan="5" class="text-center text-muted py-4">No season results have been added yet for this year.</td></tr>';
@@ -446,7 +450,7 @@ function renderSeasonDetail(detail) {
               <th aria-label="Team logo"></th>
               <th>Manager</th>
               <th>Record</th>
-              <th>Playoffs</th>
+              <th>${isSeason20 ? 'Paid' : 'Playoffs'}</th>
             </tr>
           </thead>
           <tbody>${rows}</tbody>
