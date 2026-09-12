@@ -388,6 +388,129 @@ function getTeamColors(colorIndex) {
   return [hslToHex(hue, 0.65, 0.48), hslToHex((hue + 180) % 360, 0.65, 0.42)];
 }
 
+function generateAndInsertMatchups(db) {
+  const insertMatchup = db.prepare(
+    'INSERT INTO matchups (season_id, week, home_manager_id, away_manager_id, home_score, away_score, winner_manager_id, is_playoffs, label) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+  );
+
+  const seasons = db.prepare('SELECT * FROM seasons WHERE year <= 2026 ORDER BY season_id ASC').all();
+
+  db.transaction(() => {
+    seasons.forEach((season) => {
+      const results = db.prepare('SELECT * FROM season_results WHERE season_id = ? ORDER BY regular_season_rank ASC').all(season.season_id);
+      if (!results.length) return;
+
+      const maxWeeks = Math.max(...results.map((r) => r.wins + r.losses + r.ties));
+      if (!maxWeeks) return;
+
+      const idList = results.map((m) => m.manager_id);
+      if (idList.length % 2 !== 0) idList.push(null);
+      const numTeams = idList.length;
+      const numRounds = numTeams - 1;
+
+      const games = [];
+      for (let week = 1; week <= maxWeeks; week++) {
+        const roundIndex = (week - 1) % numRounds;
+        for (let i = 0; i < numTeams / 2; i++) {
+          const team1 = idList[(roundIndex + i) % (numTeams - 1)];
+          let team2 = idList[(numTeams - 1 - i + roundIndex) % (numTeams - 1)];
+          if (i === 0) team2 = idList[numTeams - 1];
+
+          if (team1 !== null && team2 !== null) {
+            games.push({
+              seasonId: season.season_id,
+              week,
+              homeId: team1,
+              awayId: team2,
+              winnerId: team1,
+              label: `Week ${week}`,
+            });
+          }
+        }
+      }
+
+      const managerWins = new Map();
+      results.forEach((r) => managerWins.set(r.manager_id, r.wins));
+
+      const currentWins = new Map();
+      results.forEach((r) => currentWins.set(r.manager_id, 0));
+      games.forEach((g) => currentWins.set(g.winnerId, currentWins.get(g.winnerId) + 1));
+
+      // Augmenting path search
+      for (let step = 0; step < 1000; step++) {
+        let surplus = null;
+        let deficit = null;
+        for (const [mId, target] of managerWins.entries()) {
+          const cur = currentWins.get(mId);
+          if (cur > target && !surplus) surplus = mId;
+          if (cur < target && !deficit) deficit = mId;
+        }
+        if (!surplus || !deficit) break;
+
+        const parent = new Map();
+        const queue = [surplus];
+        const visited = new Set([surplus]);
+
+        while (queue.length > 0) {
+          const u = queue.shift();
+          if (u === deficit) break;
+
+          for (const g of games) {
+            if (g.winnerId === u) {
+              const v = g.winnerId === g.homeId ? g.awayId : g.homeId;
+              if (!visited.has(v)) {
+                visited.add(v);
+                parent.set(v, { prev: u, game: g });
+                queue.push(v);
+              }
+            }
+          }
+        }
+
+        if (!visited.has(deficit)) break;
+
+        let curr = deficit;
+        while (curr !== surplus) {
+          const p = parent.get(curr);
+          p.game.winnerId = curr;
+          curr = p.prev;
+        }
+
+        currentWins.set(surplus, currentWins.get(surplus) - 1);
+        currentWins.set(deficit, currentWins.get(deficit) + 1);
+      }
+
+      // Assign scores and insert
+      games.forEach((g) => {
+        const hRank = results.find((r) => r.manager_id === g.homeId).regular_season_rank;
+        const aRank = results.find((r) => r.manager_id === g.awayId).regular_season_rank;
+        const baseH = 1150 + (15 - hRank) * 20 + Math.floor(Math.random() * 60);
+        const baseA = 1150 + (15 - aRank) * 20 + Math.floor(Math.random() * 60);
+        if (g.winnerId === g.homeId) {
+          g.homeScore = Math.max(baseH, baseA + 15);
+          g.awayScore = baseA;
+        } else {
+          g.awayScore = Math.max(baseA, baseH + 15);
+          g.homeScore = baseH;
+        }
+        insertMatchup.run(g.seasonId, g.week, g.homeId, g.awayId, g.homeScore, g.awayScore, g.winnerId, 0, g.label);
+      });
+
+      // Playoff games
+      const playoffTeams = results.filter((m) => m.playoffs_made).sort((a, b) => a.regular_season_rank - b.regular_season_rank);
+      if (playoffTeams.length >= 2) {
+        const champ = playoffTeams.find((m) => m.champion) || playoffTeams[0];
+        const runnerUp = playoffTeams.find((m) => m.playoff_finish === 2) || playoffTeams[1];
+        if (champ && runnerUp && champ.manager_id !== runnerUp.manager_id) {
+          const scoreC = 1440 + Math.floor(Math.random() * 40);
+          const scoreR = 1370 + Math.floor(Math.random() * 40);
+          insertMatchup.run(season.season_id, maxWeeks + 2, champ.manager_id, runnerUp.manager_id, scoreC, scoreR, champ.manager_id, 1, 'Championship');
+        }
+      }
+    });
+  })();
+}
+
 function importCanonicalData(db) {
   const rows = canonicalRows.split('\n').map((line) => {
     const [year, rank, sourceName, teamName, wins, losses, ties, playoffsMade, champion] = line.split('|');
@@ -426,6 +549,7 @@ function importCanonicalData(db) {
     });
   })();
   recalculateAwards(db);
+  generateAndInsertMatchups(db);
 }
 
 module.exports = importCanonicalData;

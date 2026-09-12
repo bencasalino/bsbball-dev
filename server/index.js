@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const Database = require('better-sqlite3');
-const { getTrophyCaseData: getCalculatedTrophyCaseData, getGoatData, getCareerTrajectoryData } = require('./trophy-case');
+const { getTrophyCaseData: getCalculatedTrophyCaseData, getGoatData, getCareerTrajectoryData, getHeadToHeadRivalryData } = require('./trophy-case');
 
 const ROOT = path.join(__dirname, '..');
 const DB_PATH = path.join(ROOT, 'data', 'league.db');
@@ -554,6 +554,13 @@ app.get('/api/career-trajectories/:managerId', (req, res) => {
   res.json(trajectory);
 });
 
+app.get('/api/rivalries/:m1Id/:m2Id', (req, res) => {
+  if (!requireDb(res)) return;
+  const data = getHeadToHeadRivalryData(getDbInstance(), req.params.m1Id, req.params.m2Id);
+  if (!data) return res.status(404).json({ error: 'Rivalry data not found or invalid managers' });
+  res.json(data);
+});
+
 function sendIndex(req, res) {
   res.sendFile(INDEX_PATH);
 }
@@ -568,6 +575,7 @@ app.get('/hall-of-fame', sendIndex);
 app.get('/record-book', sendIndex);
 app.get('/goat', sendIndex);
 app.get('/career-trajectories', sendIndex);
+app.get('/rivalries', sendIndex);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

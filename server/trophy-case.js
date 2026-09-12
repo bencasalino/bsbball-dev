@@ -341,4 +341,135 @@ function getCareerTrajectoryData(db, managerId) {
   };
 }
 
-module.exports = { AWARD_TYPES, GOAT_WEIGHTS, calculateGoatScore, careerAchievements, recalculateAwards, getTrophyCaseData, getGoatData, getCareerTrajectoryData, seasonAwardCodes };
+function getHeadToHeadRivalryData(db, m1Id, m2Id) {
+  const m1 = db.prepare('SELECT manager_id, name, team_logo, team_color_1, team_color_2 FROM managers WHERE manager_id = ?').get(m1Id);
+  const m2 = db.prepare('SELECT manager_id, name, team_logo, team_color_1, team_color_2 FROM managers WHERE manager_id = ?').get(m2Id);
+
+  if (!m1 || !m2 || Number(m1Id) === Number(m2Id)) return null;
+
+  const games = db.prepare(`
+    SELECT
+      mu.*,
+      s.season_number,
+      s.year,
+      sr1.team_name AS home_team_name,
+      sr2.team_name AS away_team_name
+    FROM matchups mu
+    JOIN seasons s ON s.season_id = mu.season_id
+    LEFT JOIN season_results sr1 ON sr1.season_id = mu.season_id AND sr1.manager_id = mu.home_manager_id
+    LEFT JOIN season_results sr2 ON sr2.season_id = mu.season_id AND sr2.manager_id = mu.away_manager_id
+    WHERE (mu.home_manager_id = ? AND mu.away_manager_id = ?)
+       OR (mu.home_manager_id = ? AND mu.away_manager_id = ?)
+    ORDER BY s.season_number DESC, mu.week DESC, mu.id DESC
+  `).all(m1Id, m2Id, m2Id, m1Id);
+
+  let m1Wins = 0;
+  let m2Wins = 0;
+  let regWins1 = 0;
+  let regWins2 = 0;
+  let playoffWins1 = 0;
+  let playoffWins2 = 0;
+  let m1Points = 0;
+  let m2Points = 0;
+  let biggestWinM1 = null;
+  let biggestWinM2 = null;
+  let closestGame = null;
+
+  games.forEach((game) => {
+    const isM1Home = game.home_manager_id === Number(m1Id);
+    const score1 = isM1Home ? game.home_score : game.away_score;
+    const score2 = isM1Home ? game.away_score : game.home_score;
+    const diff1 = score1 - score2;
+    const diff2 = score2 - score1;
+
+    m1Points += score1;
+    m2Points += score2;
+
+    const gameObj = {
+      ...game,
+      m1Score: score1,
+      m2Score: score2,
+      margin: Math.abs(diff1),
+      isM1Winner: game.winner_manager_id === Number(m1Id),
+    };
+
+    if (!closestGame || Math.abs(diff1) < closestGame.margin) {
+      closestGame = gameObj;
+    }
+
+    if (game.winner_manager_id === Number(m1Id)) {
+      m1Wins++;
+      if (game.is_playoffs) playoffWins1++; else regWins1++;
+      if (!biggestWinM1 || diff1 > biggestWinM1.margin) biggestWinM1 = { ...gameObj, margin: diff1 };
+    } else if (game.winner_manager_id === Number(m2Id)) {
+      m2Wins++;
+      if (game.is_playoffs) playoffWins2++; else regWins2++;
+      if (!biggestWinM2 || diff2 > biggestWinM2.margin) biggestWinM2 = { ...gameObj, margin: diff2 };
+    }
+  });
+
+  const sharedSeasons = db.prepare(`
+    SELECT
+      sr1.season_id,
+      s.season_number,
+      s.year,
+      sr1.regular_season_rank AS rank1,
+      sr2.regular_season_rank AS rank2
+    FROM season_results sr1
+    JOIN season_results sr2 ON sr2.season_id = sr1.season_id AND sr2.manager_id = ?
+    JOIN seasons s ON s.season_id = sr1.season_id
+    WHERE sr1.manager_id = ? AND (sr1.wins + sr1.losses + sr1.ties) > 0
+    ORDER BY s.season_number DESC
+  `).all(m2Id, m1Id);
+
+  let m1FinishedHigher = 0;
+  let m2FinishedHigher = 0;
+  sharedSeasons.forEach((row) => {
+    if (row.rank1 < row.rank2) m1FinishedHigher++;
+    else if (row.rank2 < row.rank1) m2FinishedHigher++;
+  });
+
+  const trajectory1 = getCareerTrajectoryData(db, m1Id);
+  const trajectory2 = getCareerTrajectoryData(db, m2Id);
+
+  const sum1 = trajectory1.career_summary;
+  const sum2 = trajectory2.career_summary;
+
+  const taleOfTheTape = [
+    { label: 'Championship Titles', val1: sum1.championships, val2: sum2.championships, type: 'number' },
+    { label: 'Finals Appearances', val1: sum1.finals, val2: sum2.finals, type: 'number' },
+    { label: 'Top 3 Finishes', val1: sum1.third_places + sum1.runner_ups + sum1.championships, val2: sum2.third_places + sum2.runner_ups + sum2.championships, type: 'number' },
+    { label: 'Total Career Wins', val1: sum1.wins, val2: sum2.wins, type: 'number' },
+    { label: 'Career Win %', val1: sum1.winning_percentage, val2: sum2.winning_percentage, type: 'percentage' },
+    { label: 'Best Regular Season', val1: sum1.best_regular_season_finish, val2: sum2.best_regular_season_finish, type: 'ordinal', invert: true },
+    { label: 'GOAT Score', val1: sum1.goat_score, val2: sum2.goat_score, type: 'number' },
+    { label: 'GOAT Rank', val1: sum1.goat_rank, val2: sum2.goat_rank, type: 'rank', invert: true },
+    { label: 'Shared Seasons Ahead', val1: m1FinishedHigher, val2: m2FinishedHigher, type: 'number' },
+  ];
+
+  return {
+    m1,
+    m2,
+    h2h: {
+      totalGames: games.length,
+      m1Wins,
+      m2Wins,
+      regWins1,
+      regWins2,
+      playoffWins1,
+      playoffWins2,
+      m1Points,
+      m2Points,
+      sharedSeasonsCount: sharedSeasons.length,
+      m1FinishedHigher,
+      m2FinishedHigher,
+      biggestWinM1,
+      biggestWinM2,
+      closestGame,
+    },
+    taleOfTheTape,
+    games,
+  };
+}
+
+module.exports = { AWARD_TYPES, GOAT_WEIGHTS, calculateGoatScore, careerAchievements, recalculateAwards, getTrophyCaseData, getGoatData, getCareerTrajectoryData, getHeadToHeadRivalryData, seasonAwardCodes };

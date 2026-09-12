@@ -1480,6 +1480,120 @@ header .h4{
   text-align: right;
 }
 
+.rivalry-selectors {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.rivalry-selectors label {
+  color: var(--text-muted);
+  display: grid;
+  font-size: 0.75rem;
+  font-weight: 800;
+  gap: 0.4rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rivalry-selectors select {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font: inherit;
+  padding: 0.7rem 0.8rem;
+}
+
+.rivalry-vs-badge {
+  align-self: flex-end;
+  background: #e65100;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 900;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  margin-bottom: 0.2rem;
+  text-align: center;
+  width: 2.5rem;
+}
+
+.rivalry-banner {
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.2fr 1.6fr 1.2fr;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.rivalry-banner__manager {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rivalry-score {
+  color: var(--text);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.rivalry-score-label {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.rivalry-banner__center {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 0 1rem;
+}
+
+.rivalry-total-games {
+  color: #e65100;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.rivalry-substats {
+  display: grid;
+  gap: 0.6rem 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 0.85rem;
+}
+
+.rivalry-substats div {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.45rem;
+}
+
+.rivalry-substats span {
+  color: var(--text-muted);
+  font-size: 0.65rem;
+}
+
+.rivalry-substats strong {
+  font-size: 0.95rem;
+}
+
+.rivalry-tape-table td.rivalry-tape__winner {
+  background: rgba(85, 168, 104, 0.12);
+  color: #8bc99a;
+}
+
 @media (max-width: 991.98px) {
   .hero-card,
   .content-grid,
@@ -1561,5 +1675,23 @@ header .h4{
 
   .trajectory-chart svg {
     height: 16rem;
+  }
+
+  .rivalry-selectors,
+  .rivalry-banner {
+    grid-template-columns: 1fr;
+  }
+
+  .rivalry-vs-badge {
+    align-self: center;
+    margin: 0 auto;
+  }
+
+  .rivalry-banner__center {
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
   }
 }

@@ -70,8 +70,29 @@ CREATE TABLE IF NOT EXISTS awards (
   FOREIGN KEY (award_id) REFERENCES award_types(award_id)
 );
 
+-- Matchups: Head-to-head weekly game results
+CREATE TABLE IF NOT EXISTS matchups (
+  id INTEGER PRIMARY KEY,
+  season_id INTEGER NOT NULL,
+  week INTEGER NOT NULL,
+  home_manager_id INTEGER NOT NULL,
+  away_manager_id INTEGER NOT NULL,
+  home_score INTEGER NOT NULL,
+  away_score INTEGER NOT NULL,
+  winner_manager_id INTEGER NOT NULL,
+  is_playoffs INTEGER NOT NULL DEFAULT 0,
+  label TEXT,
+  FOREIGN KEY (season_id) REFERENCES seasons(season_id),
+  FOREIGN KEY (home_manager_id) REFERENCES managers(manager_id),
+  FOREIGN KEY (away_manager_id) REFERENCES managers(manager_id),
+  FOREIGN KEY (winner_manager_id) REFERENCES managers(manager_id)
+);
+
 -- Indexes to speed up common queries
 CREATE INDEX IF NOT EXISTS idx_season_results_season ON season_results(season_id);
 CREATE INDEX IF NOT EXISTS idx_season_results_manager ON season_results(manager_id);
 CREATE INDEX IF NOT EXISTS idx_awards_manager ON awards(manager_id);
+CREATE INDEX IF NOT EXISTS idx_matchups_home ON matchups(home_manager_id);
+CREATE INDEX IF NOT EXISTS idx_matchups_away ON matchups(away_manager_id);
+CREATE INDEX IF NOT EXISTS idx_matchups_season ON matchups(season_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_awards_manager_season_type ON awards(manager_id, season_id, award_id);

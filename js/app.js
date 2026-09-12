@@ -8,6 +8,7 @@ const navigationItems = [
   { path: '/record-book', label: 'Record Book' },
   { path: '/goat', label: 'GOAT Rankings' },
   { path: '/career-trajectories', label: 'Careers' },
+  { path: '/rivalries', label: 'Rivalries' },
   { path: '/seasons/20', label: 'Season 20' },
 ];
 
@@ -985,6 +986,152 @@ function renderManagerProfile(trajectory) {
   `;
 }
 
+function renderRivalries(managers, rivalry) {
+  const { m1, m2, h2h, taleOfTheTape, games } = rivalry;
+
+  const sortedManagers = [...managers].sort((a, b) => a.name.localeCompare(b.name));
+
+  const formatTaleVal = (item, isVal1) => {
+    const val = isVal1 ? item.val1 : item.val2;
+    if (val == null) return '—';
+    if (item.type === 'percentage') return formatPercentage(val);
+    if (item.type === 'ordinal') return formatOrdinal(val);
+    if (item.type === 'rank') return `#${val}`;
+    return val.toLocaleString();
+  };
+
+  const getAdvantageClass = (item, isVal1) => {
+    const v1 = item.val1;
+    const v2 = item.val2;
+    if (v1 == null || v2 == null || v1 === v2) return '';
+    const isBetter = item.invert ? (isVal1 ? v1 < v2 : v2 < v1) : (isVal1 ? v1 > v2 : v2 > v1);
+    return isBetter ? 'rivalry-tape__winner' : '';
+  };
+
+  const taleRows = taleOfTheTape.map((item) => `
+    <tr>
+      <td class="${getAdvantageClass(item, true)}"><strong>${formatTaleVal(item, true)}</strong></td>
+      <td class="text-center text-muted fw-bold">${escapeHtml(item.label)}</td>
+      <td class="${getAdvantageClass(item, false)} text-end"><strong>${formatTaleVal(item, false)}</strong></td>
+    </tr>
+  `).join('');
+
+  const gameRows = games.map((game) => {
+    const isM1Home = game.home_manager_id === m1.manager_id;
+    const name1 = isM1Home ? shortenManagerName(m1.name) : shortenManagerName(m2.name);
+    const name2 = isM1Home ? shortenManagerName(m2.name) : shortenManagerName(m1.name);
+    const score1 = isM1Home ? game.home_score : game.away_score;
+    const score2 = isM1Home ? game.away_score : game.home_score;
+    const winnerName = game.winner_manager_id === m1.manager_id ? shortenManagerName(m1.name) : shortenManagerName(m2.name);
+
+    return `
+      <tr>
+        <td><a href="/seasons/${game.season_id}" data-route>S${game.season_number}</a></td>
+        <td>${game.year}</td>
+        <td>${game.is_playoffs ? `<span class="badge bg-warning text-dark"><i class="fa-solid fa-trophy" aria-hidden="true"></i> ${escapeHtml(game.label || 'Playoffs')}</span>` : escapeHtml(game.label || `Week ${game.week}`)}</td>
+        <td><strong>${escapeHtml(game.home_team_name || name1)}</strong> vs <strong>${escapeHtml(game.away_team_name || name2)}</strong></td>
+        <td><strong>${score1} – ${score2}</strong></td>
+        <td><strong class="${game.winner_manager_id === m1.manager_id ? 'text-success' : 'text-primary'}">${escapeHtml(winnerName)}</strong></td>
+      </tr>
+    `;
+  }).join('');
+
+  appContainer.innerHTML = `
+    <section class="page-card rivalry-page">
+      <p class="page-eyebrow"><i class="fa-solid fa-handshake-simple" aria-hidden="true"></i> Rivalries</p>
+      <h2 class="page-title">Head-to-Head Rivalry Comparison</h2>
+      <p class="page-copy">Compare all-time head-to-head records, shared seasons, playoff clashes, and game logs between any two managers.</p>
+
+      <div class="rivalry-selectors mt-4">
+        <label>Manager 1
+          <select id="rivalry-m1">
+            ${sortedManagers.map((m) => `<option value="${m.manager_id}" ${m.manager_id === m1.manager_id ? 'selected' : ''}>${escapeHtml(shortenManagerName(m.name))}</option>`).join('')}
+          </select>
+        </label>
+        <div class="rivalry-vs-badge">VS</div>
+        <label>Manager 2
+          <select id="rivalry-m2">
+            ${sortedManagers.map((m) => `<option value="${m.manager_id}" ${m.manager_id === m2.manager_id ? 'selected' : ''}>${escapeHtml(shortenManagerName(m.name))}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+
+      <div class="rivalry-banner mt-4">
+        <div class="rivalry-banner__manager">
+          <span class="team-logo" style="--team-color-1: ${escapeHtml(m1.team_color_1)}; --team-color-2: ${escapeHtml(m1.team_color_2)}" title="${escapeHtml(m1.name)}"><i class="${escapeHtml(m1.team_logo)}" aria-hidden="true"></i></span>
+          <h3><a href="/managers/${m1.manager_id}" data-route>${escapeHtml(shortenManagerName(m1.name))}</a></h3>
+          <strong class="rivalry-score">${h2h.m1Wins}</strong>
+          <span class="rivalry-score-label">Head-to-Head Wins</span>
+        </div>
+
+        <div class="rivalry-banner__center">
+          <span class="rivalry-total-games">${h2h.totalGames} Total Games</span>
+          <div class="rivalry-substats">
+            <div><span>Regular Season</span><strong>${h2h.regWins1} – ${h2h.regWins2}</strong></div>
+            <div><span>Playoffs</span><strong>${h2h.playoffWins1} – ${h2h.playoffWins2}</strong></div>
+            <div><span>Shared Seasons</span><strong>${h2h.sharedSeasonsCount}</strong></div>
+            <div><span>Seasons Ahead</span><strong>${h2h.m1FinishedHigher} – ${h2h.m2FinishedHigher}</strong></div>
+          </div>
+        </div>
+
+        <div class="rivalry-banner__manager">
+          <span class="team-logo" style="--team-color-1: ${escapeHtml(m2.team_color_1)}; --team-color-2: ${escapeHtml(m2.team_color_2)}" title="${escapeHtml(m2.name)}"><i class="${escapeHtml(m2.team_logo)}" aria-hidden="true"></i></span>
+          <h3><a href="/managers/${m2.manager_id}" data-route>${escapeHtml(shortenManagerName(m2.name))}</a></h3>
+          <strong class="rivalry-score">${h2h.m2Wins}</strong>
+          <span class="rivalry-score-label">Head-to-Head Wins</span>
+        </div>
+      </div>
+
+      <h3 class="section-title mt-4">Tale of the Tape</h3>
+      <div class="table-shell mt-3">
+        <table class="table data-table rivalry-tape-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th style="width: 35%;">${escapeHtml(shortenManagerName(m1.name))}</th>
+              <th class="text-center" style="width: 30%;">Stat</th>
+              <th class="text-end" style="width: 35%;">${escapeHtml(shortenManagerName(m2.name))}</th>
+            </tr>
+          </thead>
+          <tbody>${taleRows}</tbody>
+        </table>
+      </div>
+
+      <h3 class="section-title mt-4">Game-by-Game Matchup History</h3>
+      <div class="table-shell mt-3">
+        <table class="table data-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Season</th>
+              <th>Year</th>
+              <th>Game</th>
+              <th>Matchup</th>
+              <th>Score</th>
+              <th>Winner</th>
+            </tr>
+          </thead>
+          <tbody>${gameRows.length ? gameRows : '<tr><td colspan="6" class="text-center text-muted py-4">No head-to-head games found between these managers.</td></tr>'}</tbody>
+        </table>
+      </div>
+    </section>
+  `;
+
+  const sel1 = document.getElementById('rivalry-m1');
+  const sel2 = document.getElementById('rivalry-m2');
+
+  const onSelectChange = async () => {
+    let id1 = sel1.value;
+    let id2 = sel2.value;
+    if (id1 === id2) {
+      id2 = sortedManagers.find((m) => String(m.manager_id) !== String(id1)).manager_id;
+    }
+    const nextData = await fetchJson(`/api/rivalries/${id1}/${id2}`);
+    renderRivalries(managers, nextData);
+  };
+
+  sel1.addEventListener('change', onSelectChange);
+  sel2.addEventListener('change', onSelectChange);
+}
+
 async function renderRoute() {
   setActiveNavigation();
   renderLoading();
@@ -1045,6 +1192,15 @@ async function renderRoute() {
     if (path === '/career-trajectories') {
       const managers = await fetchJson('/api/managers');
       renderCareerTrajectories(managers.sort((left, right) => left.name.localeCompare(right.name)));
+      return;
+    }
+
+    if (path === '/rivalries') {
+      const managers = await fetchJson('/api/managers');
+      const ben = managers.find((m) => m.name === 'Ben Casalino') || managers[0];
+      const jon = managers.find((m) => m.name === 'Jonathan Hennke') || managers[1];
+      const rivalry = await fetchJson(`/api/rivalries/${ben.manager_id}/${jon.manager_id}`);
+      renderRivalries(managers, rivalry);
       return;
     }
 
