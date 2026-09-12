@@ -1380,9 +1380,10 @@ header .h4{
 
 .record-ranking-list small {
   color: var(--text-muted);
+  display: block;
   font-size: 0.72rem;
   font-weight: 400;
-  margin-top: 0.18rem;
+  margin-top: 0.3rem;
 }
 
 .goat-podium-grid {
