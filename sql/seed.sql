@@ -108,7 +108,7 @@ UPDATE managers SET team_logo = 'fa-solid fa-bolt', team_color_1 = '#2A9D8F', te
 UPDATE managers SET team_logo = 'fa-solid fa-crown', team_color_1 = '#9B5DE5', team_color_2 = '#FEE440' WHERE manager_id = 4;
 UPDATE managers SET team_logo = 'fa-solid fa-star', team_color_1 = '#FF595E', team_color_2 = '#1982C4' WHERE manager_id = 5;
 UPDATE managers SET team_logo = 'fa-solid fa-fire', team_color_1 = '#FF6B35', team_color_2 = '#004E64' WHERE manager_id = 6;
-UPDATE managers SET team_logo = 'fa-solid fa-mountain', team_color_1 = '#6A4C93', team_color_2 = '#8AC926' WHERE manager_id = 7;
+UPDATE managers SET team_logo = 'fa-solid fa-fan', team_color_1 = '#1D1160', team_color_2 = '#E56020' WHERE manager_id = 7;
 UPDATE managers SET team_logo = 'fa-solid fa-dragon', team_color_1 = '#D7263D', team_color_2 = '#02111B' WHERE manager_id = 8;
 UPDATE managers SET team_logo = 'fa-solid fa-feather', team_color_1 = '#00A6A6', team_color_2 = '#F5E663' WHERE manager_id = 9;
 UPDATE managers SET team_logo = 'fa-solid fa-rocket', team_color_1 = '#8338EC', team_color_2 = '#FFBE0B' WHERE manager_id = 10;
@@ -154,7 +154,7 @@ UPDATE managers SET team_logo = 'fa-solid fa-bug', team_color_1 = '#606C38', tea
 UPDATE managers SET team_logo = 'fa-solid fa-spider', team_color_1 = '#212529', team_color_2 = '#E63946' WHERE manager_id = 50;
 UPDATE managers SET team_logo = 'fa-solid fa-wifi', team_color_1 = '#FF006E', team_color_2 = '#8338EC' WHERE manager_id = 51;
 UPDATE managers SET team_logo = 'fa-solid fa-camera', team_color_1 = '#495057', team_color_2 = '#F8F9FA' WHERE manager_id = 52;
-UPDATE managers SET team_logo = 'fa-solid fa-music', team_color_1 = '#7209B7', team_color_2 = '#F72585' WHERE manager_id = 53;
+UPDATE managers SET team_logo = 'fa-solid fa-paw', team_color_1 = '#3D405B', team_color_2 = '#F28482' WHERE manager_id = 53;
 UPDATE managers SET team_logo = 'fa-solid fa-bell', team_color_1 = '#F77F00', team_color_2 = '#003049' WHERE manager_id = 54;
 UPDATE managers SET team_logo = 'fa-solid fa-key', team_color_1 = '#FFD60A', team_color_2 = '#001D3D' WHERE manager_id = 55;
 UPDATE managers SET team_logo = 'fa-solid fa-lock', team_color_1 = '#606C38', team_color_2 = '#283618' WHERE manager_id = 56;
