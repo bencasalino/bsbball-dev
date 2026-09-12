@@ -19,7 +19,10 @@ const GOAT_WEIGHTS = {
 };
 
 function calculateGoatScore(breakdown) {
-  const points = Object.fromEntries(Object.entries(GOAT_WEIGHTS).map(([key, weight]) => [key, breakdown[key] * weight]));
+  const points = {};
+  Object.entries(GOAT_WEIGHTS).forEach(([key, weight]) => {
+    points[key] = (breakdown[key] || 0) * weight;
+  });
   const goatScore = Object.values(points).reduce((total, value) => total + value, 0);
   return { goatScore, points };
 }
@@ -178,7 +181,8 @@ function recalculateAwards(db) {
     ORDER BY s.season_number ASC, sr.regular_season_rank ASC
   `).all();
   const types = db.prepare('SELECT award_id, code FROM award_types').all();
-  const typeIds = Object.fromEntries(types.map((type) => [type.code, type.award_id]));
+  const typeIds = {};
+  types.forEach((type) => { typeIds[type.code] = type.award_id; });
   const generatedIds = AWARD_TYPES.map((type) => typeIds[type.code]).filter(Boolean);
   const deleteAwards = db.prepare(`DELETE FROM awards WHERE award_id IN (${generatedIds.map(() => '?').join(',')})`);
   const insertAward = db.prepare('INSERT OR IGNORE INTO awards (season_id, manager_id, award_id) VALUES (?, ?, ?)');
