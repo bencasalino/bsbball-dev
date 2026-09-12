@@ -1507,13 +1507,14 @@ header .h4{
 
 .rivalry-vs-badge {
   align-self: flex-end;
-  background: #e65100;
+  background: var(--surface-3);
+  border: 1px solid var(--border-strong);
   border-radius: 50%;
-  color: #ffffff;
+  color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 900;
   height: 2.5rem;
-  line-height: 2.5rem;
+  line-height: 2.3rem;
   margin-bottom: 0.2rem;
   text-align: center;
   width: 2.5rem;
@@ -1557,11 +1558,26 @@ header .h4{
 }
 
 .rivalry-total-games {
-  color: #e65100;
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.team-logo--sm {
+  font-size: 0.72rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  vertical-align: middle;
+}
+
+.rivalry-game__matchup,
+.rivalry-game__winner {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.45rem;
+  white-space: nowrap;
 }
 
 .rivalry-substats {

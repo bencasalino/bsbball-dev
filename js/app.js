@@ -1016,12 +1016,16 @@ function renderRivalries(managers, rivalry) {
     </tr>
   `).join('');
 
+  const renderSmallLogo = (logo, color1, color2, title = '') => `
+    <span class="team-logo team-logo--sm" style="--team-color-1: ${escapeHtml(color1)}; --team-color-2: ${escapeHtml(color2)}" title="${escapeHtml(title)}">
+      <i class="${escapeHtml(logo)}" aria-hidden="true"></i>
+    </span>
+  `;
+
   const gameRows = games.map((game) => {
-    const isM1Home = game.home_manager_id === m1.manager_id;
-    const name1 = isM1Home ? shortenManagerName(m1.name) : shortenManagerName(m2.name);
-    const name2 = isM1Home ? shortenManagerName(m2.name) : shortenManagerName(m1.name);
-    const score1 = isM1Home ? game.home_score : game.away_score;
-    const score2 = isM1Home ? game.away_score : game.home_score;
+    const homeLogo = renderSmallLogo(game.home_logo, game.home_color_1, game.home_color_2, game.home_manager_name);
+    const awayLogo = renderSmallLogo(game.away_logo, game.away_color_1, game.away_color_2, game.away_manager_name);
+    const winnerLogo = renderSmallLogo(game.winner_logo, game.winner_color_1, game.winner_color_2, game.winner_manager_name);
     const winnerName = game.winner_manager_id === m1.manager_id ? shortenManagerName(m1.name) : shortenManagerName(m2.name);
 
     return `
@@ -1029,9 +1033,9 @@ function renderRivalries(managers, rivalry) {
         <td><a href="/seasons/${game.season_id}" data-route>S${game.season_number}</a></td>
         <td>${game.year}</td>
         <td>${game.is_playoffs ? `<span class="badge bg-warning text-dark"><i class="fa-solid fa-trophy" aria-hidden="true"></i> ${escapeHtml(game.label || 'Playoffs')}</span>` : escapeHtml(game.label || `Week ${game.week}`)}</td>
-        <td><strong>${escapeHtml(game.home_team_name || name1)}</strong> vs <strong>${escapeHtml(game.away_team_name || name2)}</strong></td>
-        <td><strong>${score1} – ${score2}</strong></td>
-        <td><strong class="${game.winner_manager_id === m1.manager_id ? 'text-success' : 'text-primary'}">${escapeHtml(winnerName)}</strong></td>
+        <td><span class="rivalry-game__matchup">${homeLogo} <strong>${escapeHtml(game.home_team_name)}</strong> <span class="text-muted small mx-1">vs</span> ${awayLogo} <strong>${escapeHtml(game.away_team_name)}</strong></span></td>
+        <td><strong>${game.home_score} – ${game.away_score}</strong></td>
+        <td><span class="rivalry-game__winner">${winnerLogo} <strong>${escapeHtml(winnerName)}</strong></span></td>
       </tr>
     `;
   }).join('');
@@ -1068,7 +1072,7 @@ function renderRivalries(managers, rivalry) {
           <span class="rivalry-total-games">${h2h.totalGames} Total Games</span>
           <div class="rivalry-substats">
             <div><span>Regular Season</span><strong>${h2h.regWins1} – ${h2h.regWins2}</strong></div>
-            <div><span>Playoffs</span><strong>${h2h.playoffWins1} – ${h2h.playoffWins2}</strong></div>
+            <div><span>Total Points Scored</span><strong>${h2h.m1Points.toLocaleString()} – ${h2h.m2Points.toLocaleString()}</strong></div>
             <div><span>Shared Seasons</span><strong>${h2h.sharedSeasonsCount}</strong></div>
             <div><span>Seasons Ahead</span><strong>${h2h.m1FinishedHigher} – ${h2h.m2FinishedHigher}</strong></div>
           </div>

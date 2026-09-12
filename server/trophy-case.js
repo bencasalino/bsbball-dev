@@ -353,15 +353,49 @@ function getHeadToHeadRivalryData(db, m1Id, m2Id) {
       s.season_number,
       s.year,
       sr1.team_name AS home_team_name,
-      sr2.team_name AS away_team_name
+      sr2.team_name AS away_team_name,
+      m1.name AS home_manager_name,
+      m1.team_logo AS home_logo,
+      m1.team_color_1 AS home_color_1,
+      m1.team_color_2 AS home_color_2,
+      m2.name AS away_manager_name,
+      m2.team_logo AS away_logo,
+      m2.team_color_1 AS away_color_1,
+      m2.team_color_2 AS away_color_2,
+      mw.name AS winner_manager_name,
+      mw.team_logo AS winner_logo,
+      mw.team_color_1 AS winner_color_1,
+      mw.team_color_2 AS winner_color_2
     FROM matchups mu
     JOIN seasons s ON s.season_id = mu.season_id
+    JOIN managers m1 ON m1.manager_id = mu.home_manager_id
+    JOIN managers m2 ON m2.manager_id = mu.away_manager_id
+    JOIN managers mw ON mw.manager_id = mu.winner_manager_id
     LEFT JOIN season_results sr1 ON sr1.season_id = mu.season_id AND sr1.manager_id = mu.home_manager_id
     LEFT JOIN season_results sr2 ON sr2.season_id = mu.season_id AND sr2.manager_id = mu.away_manager_id
     WHERE (mu.home_manager_id = ? AND mu.away_manager_id = ?)
        OR (mu.home_manager_id = ? AND mu.away_manager_id = ?)
     ORDER BY s.season_number DESC, mu.week DESC, mu.id DESC
   `).all(m1Id, m2Id, m2Id, m1Id);
+
+  const latestTeamNames = new Map();
+  function getLatestTeamName(managerId, managerName) {
+    if (latestTeamNames.has(managerId)) return latestTeamNames.get(managerId);
+    const row = db.prepare(`
+      SELECT team_name
+      FROM season_results
+      WHERE manager_id = ? AND team_name IS NOT NULL AND team_name != '' AND team_name != '—'
+      ORDER BY season_id DESC
+      LIMIT 1
+    `).get(managerId);
+    let name = (row && row.team_name) ? row.team_name : null;
+    if (!name) {
+      const firstName = managerName.split(' ')[0];
+      name = `Team ${firstName}`;
+    }
+    latestTeamNames.set(managerId, name);
+    return name;
+  }
 
   let m1Wins = 0;
   let m2Wins = 0;
@@ -376,6 +410,12 @@ function getHeadToHeadRivalryData(db, m1Id, m2Id) {
   let closestGame = null;
 
   games.forEach((game) => {
+    if (!game.home_team_name || game.home_team_name === '—') {
+      game.home_team_name = getLatestTeamName(game.home_manager_id, game.home_manager_name);
+    }
+    if (!game.away_team_name || game.away_team_name === '—') {
+      game.away_team_name = getLatestTeamName(game.away_manager_id, game.away_manager_name);
+    }
     const isM1Home = game.home_manager_id === Number(m1Id);
     const score1 = isM1Home ? game.home_score : game.away_score;
     const score2 = isM1Home ? game.away_score : game.home_score;
