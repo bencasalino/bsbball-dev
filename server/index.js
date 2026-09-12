@@ -301,7 +301,8 @@ function getRecordBookData() {
       ) THEN 1 ELSE 0 END AS is_last_place
      FROM season_results sr
      JOIN seasons s ON s.season_id = sr.season_id
-     JOIN managers m ON m.manager_id = sr.manager_id`
+     JOIN managers m ON m.manager_id = sr.manager_id
+     WHERE (sr.wins + sr.losses + sr.ties) > 0`
   ).all().map((row) => ({
     ...row,
     wins: safeNumber(row.wins),

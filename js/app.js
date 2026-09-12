@@ -332,7 +332,6 @@ function renderLeaders(leaders) {
           <h2 class="page-title"><i class="fa-solid fa-chart-simple" aria-hidden="true"></i> All-time Manager Stats</h2>
         </div>
         <div class="text-md-end">
-          <p class="sort-helper mb-1">Click any column header to sort it.</p>
           <p class="sort-helper mb-0"><span class="manager-active-dot" style="margin-left: 0; margin-right: 0.35rem;" aria-hidden="true"></span>Active Managers</p>
         </div>
       </div>
