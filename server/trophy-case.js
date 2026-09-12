@@ -9,9 +9,9 @@ const AWARD_TYPES = [
 
 const GOAT_WEIGHTS = {
   championships: 100,
-  runner_ups: 50,
+  runner_ups: 45,
   third_places: 30,
-  best_regular_seasons: 25,
+  best_regular_seasons: 35,
   playoff_appearances: 15,
   regular_season_wins: 5,
   seasons_played: 10,

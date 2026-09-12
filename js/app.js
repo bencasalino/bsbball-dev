@@ -866,11 +866,19 @@ function renderGoat(data) {
       </tr>
     `;
   }).join('');
-  const podium = data.rankings.slice(0, 3).map((entry, index) => `
-    <article class="goat-podium-card goat-podium-card--${index + 1}">
-      <span class="goat-podium-rank">${['<i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i>', '<i class="fa-solid fa-medal trophy-icon trophy-icon--silver" aria-hidden="true"></i>', '<i class="fa-solid fa-medal trophy-icon trophy-icon--bronze" aria-hidden="true"></i>'][index]} #${entry.rank}</span>
+  const top2 = data.rankings.slice(0, 2).map((entry, index) => `
+    <article class="goat-podium-card goat-podium-card--${entry.rank}">
+      <span class="goat-podium-rank">${['<i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i>', '<i class="fa-solid fa-medal trophy-icon trophy-icon--silver" aria-hidden="true"></i>'][index]} #${entry.rank}</span>
       <h3 class="section-title">${escapeHtml(entry.name)}</h3>
-      <strong class="goat-podium-score">${entry.goatScore}</strong>
+      <strong class="goat-podium-score">${entry.goatScore.toLocaleString()}</strong>
+      <span>GOAT Score</span>
+    </article>
+  `).join('');
+  const sub3 = data.rankings.slice(2, 5).map((entry, index) => `
+    <article class="goat-podium-card goat-podium-card--${entry.rank}">
+      <span class="goat-podium-rank">${['<i class="fa-solid fa-medal trophy-icon trophy-icon--bronze" aria-hidden="true"></i>', '<i class="fa-solid fa-star text-warning" aria-hidden="true"></i>', '<i class="fa-solid fa-star text-warning" aria-hidden="true"></i>'][index]} #${entry.rank}</span>
+      <h3 class="section-title">${escapeHtml(entry.name)}</h3>
+      <strong class="goat-podium-score">${entry.goatScore.toLocaleString()}</strong>
       <span>GOAT Score</span>
     </article>
   `).join('');
@@ -890,7 +898,10 @@ function renderGoat(data) {
       <p class="page-copy">The greatest managers in BS Basketball history, ranked by the official GOAT Score.</p>
       <p class="page-copy">The GOAT Score measures championships, playoff success, regular-season dominance and longevity.</p>
       <div class="goat-legend" aria-label="GOAT scoring formula">${legendItems}</div>
-      <div class="goat-podium mt-4">${podium}</div>
+      <div class="goat-podium-grid mt-4">
+        <div class="goat-podium-row goat-podium-row--top">${top2}</div>
+        <div class="goat-podium-row goat-podium-row--sub">${sub3}</div>
+      </div>
       <div class="table-shell mt-4">
         <table class="table data-table goat-table align-middle mb-0">
           <thead><tr><th>Rank</th><th>Manager</th><th>GOAT Score</th><th><i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i></th><th><i class="fa-solid fa-medal trophy-icon trophy-icon--silver" aria-hidden="true"></i></th><th><i class="fa-solid fa-medal trophy-icon trophy-icon--bronze" aria-hidden="true"></i></th><th><i class="fa-solid fa-crown" aria-hidden="true"></i></th><th>Playoff Pts</th><th>Win PTS</th><th>Seasons PTS</th></tr></thead>
@@ -900,7 +911,7 @@ function renderGoat(data) {
       <div class="goat-formula mt-4">
         <h3 class="section-title">How the GOAT Score Works</h3>
         <table class="table data-table goat-formula-table align-middle mb-0"><tbody>${weightRows}</tbody></table>
-        <p class="page-copy mt-3 mb-0"><strong>GOAT Score</strong> = Championships × 100 + Runner-Ups × 50 + 3rd × 30 + Best Regular Seasons × 25 + Playoffs × 15 + Week Wins × 5 + Seasons Played × 10 − Last Places × 25</p>
+        <p class="page-copy mt-3 mb-0"><strong>GOAT Score</strong> = Championships × 100 + Runner-Ups × 45 + 3rd × 30 + Best Regular Seasons × 35 + Playoffs × 15 + Week Wins × 5 + Seasons Played × 10 − Last Places × 25</p>
       </div>
     </section>
   `;

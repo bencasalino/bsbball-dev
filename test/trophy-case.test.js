@@ -119,7 +119,7 @@ test('records the first seasons for 50 and 100 cumulative career wins', () => {
 
 test('calculates GOAT score from the official weighted breakdown', () => {
   const result = calculateGoatScore({ championships: 2, runner_ups: 1, third_places: 1, best_regular_seasons: 2, playoff_appearances: 3, regular_season_wins: 40, seasons_played: 7, last_places: 1 });
-  assert.equal(result.goatScore, 620);
+  assert.equal(result.goatScore, 635);
   assert.equal(result.points.championships, 200);
   assert.equal(result.points.seasons_played, 70);
   assert.equal(result.points.last_places, -25);
