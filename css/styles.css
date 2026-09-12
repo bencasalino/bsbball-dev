@@ -1353,6 +1353,18 @@ header .h4{
   flex-direction: column;
 }
 
+.record-ranking__manager {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.record-ranking-table td {
+  white-space: nowrap;
+  font-size: 0.86rem;
+}
+
 .record-ranking-list li > .record-ranking__manager {
   align-items: center;
   flex-direction: row;
