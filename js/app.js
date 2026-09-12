@@ -856,6 +856,25 @@ function renderRecordBook(data) {
       </div>
     </article>
   `;
+  const renderH2HRankingTable = (title, records, isLeast = false) => `
+    <article class="record-card record-card--ranking">
+      <h3 class="section-title">${title}</h3>
+      <div class="table-shell">
+        <table class="table data-table record-ranking-table align-middle mb-0">
+          <thead><tr><th>#</th><th>Manager</th><th>Opponent</th><th>Record</th><th>Win %</th></tr></thead>
+          <tbody>${(records || []).map((record, index) => `
+            <tr>
+              <td>${index + 1}</td>
+              <td><span class="record-ranking__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(record.manager_color_1)}; --team-color-2: ${escapeHtml(record.manager_color_2)}" title="${escapeHtml(record.manager_name)}"><i class="${escapeHtml(record.manager_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.manager_id}" data-route>${escapeHtml(shortenManagerName(record.manager_name))}</a></strong></span></td>
+              <td><span class="record-ranking__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(record.opponent_color_1)}; --team-color-2: ${escapeHtml(record.opponent_color_2)}" title="${escapeHtml(record.opponent_name)}"><i class="${escapeHtml(record.opponent_logo)}" aria-hidden="true"></i></span><strong><a href="/managers/${record.opponent_id}" data-route>${escapeHtml(shortenManagerName(record.opponent_name))}</a></strong></span></td>
+              <td><strong>${record.wins}-${record.losses}</strong></td>
+              <td><strong class="${isLeast ? 'text-danger' : 'text-success'}">${(record.winPct * 100).toFixed(1)}%</strong></td>
+            </tr>
+          `).join('')}</tbody>
+        </table>
+      </div>
+    </article>
+  `;
   const renderCategory = (category) => `
     <article class="record-card record-card--category">
       <h3 class="section-title">${recordCategoryIcon(category)} ${escapeHtml(category.label)}</h3>
@@ -864,7 +883,7 @@ function renderRecordBook(data) {
       </ol>
     </article>
   `;
-  const renderCategoryPanel = (key, categories) => `<div class="record-tab-panel ${key === 'singleSeason' ? 'record-tab-panel--active' : ''}" data-record-panel="${key}">${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings">${renderSeasonRankingTable('Top 20 Best Seasons', data.topBestSeasons)}${renderSeasonRankingTable('Top 20 Worst Seasons', data.topWorstSeasons, true)}</div>` : ''}<div class="record-grid record-grid--categories">${categories.map(renderCategory).join('')}</div></div>`;
+  const renderCategoryPanel = (key, categories) => `<div class="record-tab-panel ${key === 'singleSeason' ? 'record-tab-panel--active' : ''}" data-record-panel="${key}">${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings">${renderSeasonRankingTable('Top 20 Best Seasons', data.topBestSeasons)}${renderSeasonRankingTable('Top 20 Worst Seasons', data.topWorstSeasons, true)}</div>` : ''}<div class="record-grid record-grid--categories">${categories.map(renderCategory).join('')}</div>${key === 'singleSeason' ? `<div class="record-grid record-grid--rankings mt-4">${renderH2HRankingTable('🔥 Most Dominant H2H Records', data.mostDominantH2H)}${renderH2HRankingTable('🧊 Least Dominant H2H Records', data.leastDominantH2H, true)}</div>` : ''}</div>`;
 
   appContainer.innerHTML = `
     <section class="page-card">
@@ -1011,7 +1030,7 @@ function renderRivalries(managers, rivalry) {
   const taleRows = taleOfTheTape.map((item) => `
     <tr>
       <td class="${getAdvantageClass(item, true)}"><strong>${formatTaleVal(item, true)}</strong></td>
-      <td class="text-center text-muted fw-bold">${escapeHtml(item.label)}</td>
+      <td class="text-center rivalry-tape__label">${escapeHtml(item.label)}</td>
       <td class="${getAdvantageClass(item, false)} text-end"><strong>${formatTaleVal(item, false)}</strong></td>
     </tr>
   `).join('');
@@ -1214,6 +1233,34 @@ async function renderRoute() {
   }
 }
 
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('theme-toggle');
+  const icon = document.getElementById('theme-toggle-icon');
+  if (!toggleBtn || !icon) return;
+
+  const updateIcon = (theme) => {
+    if (theme === 'light') {
+      icon.className = 'fa-solid fa-sun';
+      toggleBtn.title = 'Switch to Dark Mode';
+      toggleBtn.setAttribute('aria-label', 'Switch to Dark Mode');
+    } else {
+      icon.className = 'fa-solid fa-moon';
+      toggleBtn.title = 'Switch to Light Mode';
+      toggleBtn.setAttribute('aria-label', 'Switch to Light Mode');
+    }
+  };
+
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateIcon(currentTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const active = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', active);
+    localStorage.setItem('bs_theme', active);
+    updateIcon(active);
+  });
+}
+
 document.addEventListener('click', (event) => {
   const routeLink = event.target.closest('[data-route]');
   if (!routeLink) return;
@@ -1223,4 +1270,7 @@ document.addEventListener('click', (event) => {
 });
 
 window.addEventListener('popstate', renderRoute);
-window.addEventListener('DOMContentLoaded', renderRoute);
+window.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
+  renderRoute();
+});

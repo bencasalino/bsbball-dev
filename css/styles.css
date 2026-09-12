@@ -1610,6 +1610,103 @@ header .h4{
   color: #8bc99a;
 }
 
+.rivalry-tape__label {
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] {
+  --brand: #e65100;
+  --bg: #f5f7fa;
+  --bg-elevated: #ffffff;
+  --bg-soft: #eef1f6;
+  --surface: #ffffff;
+  --surface-2: #f8f9fa;
+  --surface-3: #e9ecef;
+  --border: #dee2e6;
+  --border-strong: #ced4da;
+  --text: #1a1a1a;
+  --text-muted: #555555;
+  --text-soft: #777777;
+}
+
+[data-theme="light"] .site-header,
+[data-theme="light"] .site-footer {
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .site-nav__link {
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .site-nav__link:hover,
+[data-theme="light"] .site-nav__link:focus,
+[data-theme="light"] .site-nav__link.is-active {
+  border-bottom-color: #e65100;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .site-header__action {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .site-header__action:hover,
+[data-theme="light"] .site-header__action:focus {
+  border-color: #e65100;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .table {
+  color: var(--text);
+}
+
+[data-theme="light"] .table th {
+  color: #333333;
+  background: #f1f3f5;
+  border-color: var(--border);
+}
+
+[data-theme="light"] .table td {
+  border-color: var(--border);
+}
+
+[data-theme="light"] .leader-progress {
+  background: linear-gradient(90deg, #2e7d32 var(--progress), #e0e0e0 var(--progress));
+  color: #ffffff;
+}
+
+[data-theme="light"] .leader-progress--losses {
+  background: linear-gradient(90deg, #c62828 var(--progress), #e0e0e0 var(--progress));
+}
+
+[data-theme="light"] .record-ranking-list li > strong {
+  background: linear-gradient(90deg, #2e7d32 var(--record-progress), #e0e0e0 var(--record-progress));
+  color: #ffffff;
+}
+
+[data-theme="light"] .record-ranking-list li > strong.record-ranking__value--plain {
+  color: var(--text);
+}
+
+[data-theme="light"] .record-ranking__record--worst {
+  background: linear-gradient(90deg, #c62828 var(--record-progress), #e0e0e0 var(--record-progress)) !important;
+}
+
+[data-theme="light"] .trajectory-chart {
+  background: #f8f9fa;
+}
+
+[data-theme="light"] .hall-info-modal__dialog {
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+}
+
 @media (max-width: 991.98px) {
   .hero-card,
   .content-grid,

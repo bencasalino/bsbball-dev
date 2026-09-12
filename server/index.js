@@ -394,9 +394,62 @@ function getRecordBookData() {
     { key: 'playoffs', label: 'Most Playoff Appearances', emoji: '🎟️', records: careerCategories[3].records },
   ];
 
+  const h2hMatchups = getDbInstance().prepare('SELECT * FROM matchups WHERE is_playoffs = 0').all();
+  const pairStats = new Map();
+
+  h2hMatchups.forEach((m) => {
+    const winner = m.winner_manager_id;
+    const loser = m.winner_manager_id === m.home_manager_id ? m.away_manager_id : m.home_manager_id;
+    const key = `${winner}->${loser}`;
+    pairStats.set(key, (pairStats.get(key) || 0) + 1);
+  });
+
+  const allH2HPairs = [];
+  leaders.forEach((m1) => {
+    leaders.forEach((m2) => {
+      if (m1.manager_id === m2.manager_id) return;
+      const wins = pairStats.get(`${m1.manager_id}->${m2.manager_id}`) || 0;
+      const losses = pairStats.get(`${m2.manager_id}->${m1.manager_id}`) || 0;
+      const total = wins + losses;
+      if (total >= 5) {
+        const winPct = wins / total;
+        const diff = wins - losses;
+        allH2HPairs.push({
+          manager_id: m1.manager_id,
+          manager_name: m1.name,
+          manager_logo: m1.team_logo,
+          manager_color_1: m1.team_color_1,
+          manager_color_2: m1.team_color_2,
+          opponent_id: m2.manager_id,
+          opponent_name: m2.name,
+          opponent_logo: m2.team_logo,
+          opponent_color_1: m2.team_color_1,
+          opponent_color_2: m2.team_color_2,
+          wins,
+          losses,
+          total,
+          winPct,
+          diff,
+        });
+      }
+    });
+  });
+
+  const mostDominantH2H = [...allH2HPairs]
+    .filter((p) => p.winPct >= 0.6)
+    .sort((a, b) => b.winPct - a.winPct || b.diff - a.diff || b.wins - a.wins)
+    .slice(0, 10);
+
+  const leastDominantH2H = [...allH2HPairs]
+    .filter((p) => p.winPct <= 0.4)
+    .sort((a, b) => a.winPct - b.winPct || a.diff - b.diff || b.losses - a.losses)
+    .slice(0, 10);
+
   return {
     topBestSeasons: sortedByBestRecord.slice(0, 20),
     topWorstSeasons: sortedByWorstRecord.slice(0, 20),
+    mostDominantH2H,
+    leastDominantH2H,
     recordBookCategories: { career: careerCategories, singleSeason: singleSeasonCategories, playoffs: playoffCategories },
     careerRecords: [
       bestCareerWins && { key: 'Most Career Wins', manager_name: bestCareerWins.name, value: `${bestCareerWins.wins} wins` },
