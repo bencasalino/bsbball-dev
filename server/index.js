@@ -24,22 +24,28 @@ function getDbInstance() {
   if (db) return db;
   const fs = require('fs');
   if (!fs.existsSync(DB_PATH)) {
-    console.log('Database file not found. Initializing database...');
+    console.log('Database file not found at', DB_PATH, '- Initializing database...');
     try {
       const initDb = require('../init-db');
       initDb();
     } catch (err) {
       console.error('Failed to auto-initialize DB:', err);
-      lastDbError = err.message;
+      lastDbError = `Init error: ${err.message}`;
     }
   }
   try {
-    db = new Database(DB_PATH);
-    console.log('Opened database at', DB_PATH);
-  } catch (err) {
-    console.warn('Could not open database at', DB_PATH, '-', err.message);
-    lastDbError = err.message;
-    db = null;
+    db = new Database(DB_PATH, { readonly: true });
+    console.log('Opened database in read-only mode at', DB_PATH);
+  } catch (errReadonly) {
+    console.warn('Could not open database in read-only mode:', errReadonly.message);
+    try {
+      db = new Database(DB_PATH);
+      console.log('Opened database in read-write mode at', DB_PATH);
+    } catch (errReadWrite) {
+      console.error('Could not open database:', errReadWrite.message);
+      lastDbError = `Open error: ${errReadonly.message} | ${errReadWrite.message}`;
+      db = null;
+    }
   }
   return db;
 }
