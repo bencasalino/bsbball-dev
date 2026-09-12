@@ -374,14 +374,14 @@ function getRecordBookData() {
       const previous = managerSeasons[index - 1];
       if (!previous || row.season_number !== previous.season_number + 1) return;
       const change = row.wins - previous.wins;
-      const record = { manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: `${change > 0 ? '+' : ''}${change} wins`, detail: `S${previous.season_number} → S${row.season_number}` };
+      const record = { manager_id: row.manager_id, manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: `${change > 0 ? '+' : ''}${change} wins`, detail: `S${previous.season_number} → S${row.season_number}` };
       if (change > 0) improvements.push({ ...record, change });
       if (change < 0) collapses.push({ ...record, change });
     });
   });
   const singleSeasonCategories = [
-    { key: 'most_wins', label: 'Most Wins', emoji: '🔥', records: topTen([...seasons].sort((a, b) => b.wins - a.wins || a.losses - b.losses)).map((row) => ({ manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: row.wins, detail: `S${row.season_number} (${row.year})` })) },
-    { key: 'best_winning_percentage', label: 'Best Winning %', emoji: '📈', records: topTen([...seasons].sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins)).map((row) => ({ manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: `${(row.winning_percentage * 100).toFixed(1)}%`, detail: `S${row.season_number} (${row.year})` })) },
+    { key: 'most_wins', label: 'Most Wins', emoji: '🔥', records: topTen([...seasons].sort((a, b) => b.wins - a.wins || a.losses - b.losses)).map((row) => ({ manager_id: row.manager_id, manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: row.wins, detail: `S${row.season_number} (${row.year})` })) },
+    { key: 'best_winning_percentage', label: 'Best Winning %', emoji: '📈', records: topTen([...seasons].sort((a, b) => b.winning_percentage - a.winning_percentage || b.wins - a.wins)).map((row) => ({ manager_id: row.manager_id, manager_name: row.manager_name, team_logo: row.team_logo, team_color_1: row.team_color_1, team_color_2: row.team_color_2, value: `${(row.winning_percentage * 100).toFixed(1)}%`, detail: `S${row.season_number} (${row.year})` })) },
     { key: 'biggest_improvement', label: 'Biggest Improvement', emoji: '🚀', records: topTen(improvements.sort((a, b) => b.change - a.change)) },
     { key: 'biggest_collapse', label: 'Biggest Collapse', emoji: '📉', records: topTen(collapses.sort((a, b) => a.change - b.change)) },
   ];
@@ -561,6 +561,7 @@ app.get('/', sendIndex);
 app.get('/leaders', sendIndex);
 app.get('/seasons', sendIndex);
 app.get(/^\/seasons\/\d+$/, sendIndex);
+app.get(/^\/managers\/\d+$/, sendIndex);
 app.get('/trophy-case', sendIndex);
 app.get('/hall-of-fame', sendIndex);
 app.get('/record-book', sendIndex);

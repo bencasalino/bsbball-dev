@@ -1,0 +1,17 @@
+{
+  "name": "BS Basketball League",
+  "short_name": "BS Basketball",
+  "description": "Fantasy Basketball League History & GOAT Rankings",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#e65100",
+  "icons": [
+    {
+      "src": "/images/bsbasketball-logo.gif",
+      "sizes": "192x192 512x512",
+      "type": "image/gif",
+      "purpose": "any maskable"
+    }
+  ]
+}

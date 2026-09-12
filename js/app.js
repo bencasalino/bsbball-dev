@@ -306,7 +306,7 @@ function renderLeadersTableRows(rows) {
         </span>
       </td>
       <td>
-        <strong>${escapeHtml(row.name)}</strong>
+        <a href="/managers/${row.manager_id}" data-route><strong>${escapeHtml(row.name)}</strong></a>
         ${row.active && activeManagerNames.has(row.name) ? '<span class="manager-active-dot" title="Active manager" aria-label="Active manager"></span>' : ''}
       </td>
       <td>${formatEstYear(row.est_year)}</td>
@@ -333,7 +333,7 @@ function renderLeaders(leaders) {
         </div>
         <div class="text-md-end">
           <p class="sort-helper mb-1">Click any column header to sort it.</p>
-          <p class="sort-helper mb-0"><span class="manager-active-dot" style="margin-left: 0; margin-right: 0.35rem;" aria-hidden="true"></span>Managers with a green dot are active for the upcoming season</p>
+          <p class="sort-helper mb-0"><span class="manager-active-dot" style="margin-left: 0; margin-right: 0.35rem;" aria-hidden="true"></span>Active Managers</p>
         </div>
       </div>
       <div class="table-shell mt-4">
@@ -341,7 +341,7 @@ function renderLeaders(leaders) {
           <thead>
             <tr>
               ${leaderColumns.map((column) => `
-                <th>
+                <th aria-sort="${state.leadersSort.key === column.key ? (state.leadersSort.direction === 'asc' ? 'ascending' : 'descending') : 'none'}">
                   <button
                     type="button"
                     class="table-sort-button ${state.leadersSort.key === column.key ? 'is-active' : ''}"
@@ -683,6 +683,18 @@ function renderTrophyCase(data) {
   });
 }
 
+function getClosestHoFMilestone(member) {
+  const reqs = member.career.hall_of_fame.requirements;
+  const list = [
+    { name: 'Wins', needed: Math.max(0, reqs.wins.required - reqs.wins.current), text: `${reqs.wins.current}/${reqs.wins.required} wins (${reqs.wins.required - reqs.wins.current} wins away)` },
+    { name: 'Seasons', needed: Math.max(0, reqs.seasons.required - reqs.seasons.current), text: `${reqs.seasons.current}/${reqs.seasons.required} seasons (${reqs.seasons.required - reqs.seasons.current} seasons away)` },
+    { name: 'Top 3', needed: Math.max(0, reqs.top3Finishes.required - reqs.top3Finishes.current), text: `${reqs.top3Finishes.current}/${reqs.top3Finishes.required} Top 3 (${reqs.top3Finishes.required - reqs.top3Finishes.current} Top 3 away)` },
+    { name: 'Title', needed: reqs.championships.complete ? 0 : 1, text: `${reqs.championships.current}/1 title (1 title away)` },
+  ];
+  list.sort((a, b) => a.needed - b.needed);
+  return list[0];
+}
+
 function renderHallOfFame(data) {
   const getCompletedCount = (entry) => Object.values(entry.career.hall_of_fame.requirements).filter((requirement) => requirement.complete).length;
   const getProgressScore = (entry) => {
@@ -703,12 +715,12 @@ function renderHallOfFame(data) {
     return `
     <tr>
       ${includeStatus ? `<td><span class="hall-table__status hall-table__status--in">CLASS OF ${member.career.hall_of_fame.inducted_year}</span></td>` : ''}
-      <td><span class="hall-table__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(member.team_color_1)}; --team-color-2: ${escapeHtml(member.team_color_2)}" title="${escapeHtml(member.team_logo)}"><i class="${escapeHtml(member.team_logo)}" aria-hidden="true"></i></span><strong>${escapeHtml(member.name)}${member.active ? '<span class="manager-active-dot" title="Active manager" aria-label="Active manager"></span>' : ''}</strong></span></td>
+      <td><span class="hall-table__manager"><span class="team-logo" style="--team-color-1: ${escapeHtml(member.team_color_1)}; --team-color-2: ${escapeHtml(member.team_color_2)}" title="${escapeHtml(member.team_logo)}"><i class="${escapeHtml(member.team_logo)}" aria-hidden="true"></i></span><a href="/managers/${member.manager_id}" data-route><strong>${escapeHtml(member.name)}${member.active ? '<span class="manager-active-dot" title="Active manager" aria-label="Active manager"></span>' : ''}</strong></a></span></td>
       <td>${progressCell('Seasons', requirements.seasons)}</td>
       <td>${progressCell('Wins', requirements.wins)}</td>
       <td>${progressCell('Titles', requirements.championships)}</td>
       <td>${progressCell('Top 3', requirements.top3Finishes)}</td>
-      ${includeStatus ? `<td><span class="hall-table__crowns" aria-label="${completedCategories} completed requirements">${'<i class="fa-solid fa-gem" aria-hidden="true"></i>'.repeat(completedCategories)}</span></td>` : ''}
+      ${includeStatus ? `<td><span class="hall-table__crowns" aria-label="${completedCategories} completed requirements">${'<i class="fa-solid fa-gem" aria-hidden="true"></i>'.repeat(completedCategories)}</span></td>` : `<td><span class="hof-predictor-badge"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i> ${getClosestHoFMilestone(member).text}</span></td>`}
     </tr>
   `;
   };
@@ -717,7 +729,7 @@ function renderHallOfFame(data) {
   const renderTable = (managers, includeStatus) => `
     <div class="table-shell mt-3">
       <table class="table data-table hall-table align-middle mb-0">
-        <thead><tr>${includeStatus ? '<th>Status</th>' : ''}<th>Manager</th><th>Seasons</th><th>Wins</th><th>Titles</th><th>Top 3</th>${includeStatus ? '<th>Crowns</th>' : ''}</tr></thead>
+        <thead><tr>${includeStatus ? '<th>Status</th>' : ''}<th>Manager</th><th>Seasons</th><th>Wins</th><th>Titles</th><th>Top 3</th>${includeStatus ? '<th>Crowns</th>' : '<th>Closest Target</th>'}</tr></thead>
         <tbody>${managers.map((manager) => renderRow(manager, includeStatus)).join('')}</tbody>
       </table>
     </div>
@@ -920,6 +932,43 @@ function renderGoat(data) {
   `;
 }
 
+function renderManagerProfile(trajectory) {
+  const { manager, career_summary: summary, seasons, highlights, streaks } = trajectory;
+  const bestSeason = highlights.best_season;
+  const improvement = highlights.biggest_improvement;
+  const summaryStats = [
+    ['<i class="fa-solid fa-calendar-check" aria-hidden="true"></i> Seasons Played', summary.seasons], ['<i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i> Championships', summary.championships], ['<i class="fa-solid fa-medal trophy-icon trophy-icon--silver" aria-hidden="true"></i> Finals', summary.finals], ['<i class="fa-solid fa-bookmark" aria-hidden="true"></i> Playoff Appearances', summary.playoffs],
+    ['<i class="fa-solid fa-award" aria-hidden="true"></i> Regular-Season Wins', summary.wins], ['<i class="fa-solid fa-chart-line" aria-hidden="true"></i> Career Win %', formatPercentage(summary.winning_percentage)], ['<i class="fa-solid fa-crown" aria-hidden="true"></i> Best Regular Season', formatOrdinal(summary.best_regular_season_finish)], ['<i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i> Best Playoff Finish', summary.best_playoff_finish ? playoffLabel({ playoffs_made: true, playoff_finish: summary.best_playoff_finish }) : '—'],
+    ['<span aria-hidden="true">🐐</span> Current GOAT Rank', summary.goat_rank ? `#${summary.goat_rank}` : '—'], ['<span aria-hidden="true">🐐</span> Current GOAT Score', summary.goat_score.toLocaleString()],
+  ];
+  const highlightsList = [
+    summary.championships ? `<li><i class="fa-solid fa-trophy trophy-icon trophy-icon--gold" aria-hidden="true"></i> ${summary.championships}× Champion</li>` : '',
+    streaks.playoff_streak.length ? `<li><i class="fa-solid fa-fire" aria-hidden="true"></i> Longest Playoff Streak: ${pluralize(streaks.playoff_streak.length, 'season')}</li>` : '',
+    summary.best_regular_season_finish ? `<li><i class="fa-solid fa-medal" aria-hidden="true"></i> Best Regular Season: ${formatOrdinal(summary.best_regular_season_finish)}</li>` : '',
+    bestSeason ? `<li><i class="fa-solid fa-chart-line" aria-hidden="true"></i> Best Single-Season Record: ${formatRecord(bestSeason.wins, bestSeason.losses, bestSeason.ties)}</li>` : '',
+    improvement ? `<li><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Biggest Improvement: S${improvement.from} to S${improvement.to} (+${improvement.change} wins)</li>` : '',
+  ].filter(Boolean).join('');
+
+  appContainer.innerHTML = `
+    <section class="page-card manager-profile-page">
+      <a class="back-link mb-3" href="/leaders" data-route>← Back to League Leaders</a>
+      <div class="manager-banner mt-2">
+        <span class="team-logo manager-banner__logo" style="--team-color-1: ${escapeHtml(manager.team_color_1)}; --team-color-2: ${escapeHtml(manager.team_color_2)}" title="${escapeHtml(manager.team_logo)}"><i class="${escapeHtml(manager.team_logo)}" aria-hidden="true"></i></span>
+        <div>
+          <h2 class="page-title mb-1">${escapeHtml(shortenManagerName(manager.name))}${activeManagerNames.has(manager.name) ? '<span class="manager-active-dot" title="Active manager" aria-label="Active manager"></span>' : ''}</h2>
+          <p class="page-copy mb-0">Manager Profile · BS Basketball League</p>
+        </div>
+      </div>
+      <div class="trajectory-summary mt-4">${summaryStats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join('')}</div>
+      <div class="trajectory-highlights mt-4"><h3 class="section-title">Career Highlights</h3><ul>${highlightsList}</ul></div>
+      <h3 class="section-title mt-4">Career Trajectory</h3>
+      <div id="trajectory-chart">${renderCareerTrajectoryChart(manager, seasons)}</div>
+      <h3 class="section-title mt-4">Season-by-Season History</h3>
+      <div class="table-shell mt-3"><table class="table data-table align-middle mb-0"><thead><tr><th>Season</th><th>Year</th><th>Regular Season</th><th>Record</th><th>Win %</th><th>Playoff Finish</th><th>GOAT Points</th><th>Cumulative GOAT</th></tr></thead><tbody>${seasons.map((season) => `<tr><td><a href="/seasons/${season.season_id}" data-route>S${season.season_number}</a></td><td>${season.year}</td><td>${formatOrdinal(season.regular_season_finish)}</td><td>${formatRecord(season.wins, season.losses, season.ties)}</td><td>${formatPercentage(season.winning_percentage)}</td><td>${playoffLabelWithIcon(season)}</td><td>${season.goat_points_earned >= 0 ? '+' : ''}${season.goat_points_earned}</td><td>${season.cumulative_goat_score}</td></tr>`).join('')}</tbody></table></div>
+    </section>
+  `;
+}
+
 async function renderRoute() {
   setActiveNavigation();
   renderLoading();
@@ -943,6 +992,13 @@ async function renderRoute() {
       const seasonId = path.split('/')[2];
       const detail = await fetchJson(`/api/seasons/${seasonId}`);
       renderSeasonDetail(detail);
+      return;
+    }
+
+    if (/^\/managers\/\d+$/.test(path)) {
+      const managerId = path.split('/')[2];
+      const trajectory = await fetchJson(`/api/career-trajectories/${managerId}`);
+      renderManagerProfile(trajectory);
       return;
     }
 
