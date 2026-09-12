@@ -240,16 +240,18 @@ header .h4{
   align-items: center;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: 0.85rem;
   display: flex;
-  gap: 1.25rem;
-  padding: 1.25rem;
+  gap: 1.5rem;
+  padding: 1.5rem 1.75rem;
 }
 
 .manager-banner__logo {
-  font-size: 2.2rem;
-  height: 4.5rem;
-  width: 4.5rem;
+  flex-shrink: 0;
+  font-size: 1.8rem;
+  height: 4.75rem;
+  width: 4.75rem;
+  border-radius: 0.65rem;
 }
 
 .hero-card,
@@ -750,7 +752,7 @@ header .h4{
   align-items: center;
   background: var(--team-color-2);
   border: 2px solid var(--team-color-1);
-  border-radius: 2px;
+  border-radius: 0.45rem;
   color: var(--team-color-1);
   display: inline-flex;
   height: 2.25rem;
